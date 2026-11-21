@@ -1,0 +1,1031 @@
+{
+  "sources": {
+    "personal": {
+      "file": "personal-profile.md",
+      "title": "Personal Knowledge Profile"
+    },
+    "engineering": {
+      "file": "engineering-perspective.md",
+      "title": "Engineering & Product-Building Perspective"
+    },
+    "fullstack": {
+      "file": "Ninad_Patil_Resume.pdf",
+      "title": "Full-Stack Resume"
+    },
+    "sde": {
+      "file": "Ninad_Patil_SDE.pdf",
+      "title": "SDE Resume"
+    },
+    "ai": {
+      "file": "Ninad_SDE_AI.pdf",
+      "title": "AI/ML Resume"
+    }
+  },
+  "claims": [
+    {
+      "id": "education",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "STUDIED_AT",
+      "to": [
+        "Education",
+        "VIIT Pune"
+      ],
+      "topics": [
+        "bio",
+        "education"
+      ],
+      "text": "Ninad is studying B.Tech Electronics and Telecommunication Engineering at Vishwakarma Institute of Information Technology (VIIT), Pune, with expected graduation in 2027.",
+      "refs": [
+        [
+          "personal",
+          "Expected graduation: 2027."
+        ],
+        [
+          "sde",
+          "Electronics and Telecommunication"
+        ]
+      ],
+      "aliases": [
+        "studying",
+        "degree",
+        "college"
+      ]
+    },
+    {
+      "id": "cgpa",
+      "from": [
+        "Education",
+        "VIIT Pune"
+      ],
+      "relation": "ACHIEVED",
+      "to": [
+        "Achievement",
+        "CGPA"
+      ],
+      "topics": [
+        "education"
+      ],
+      "text": "The Full-Stack and AI/ML resumes report a CGPA of 8.78/10. The SDE resume and Personal Knowledge Profile use the rounded value 8.8/10.",
+      "refs": [
+        [
+          "fullstack",
+          "8.78"
+        ],
+        [
+          "ai",
+          "8.78"
+        ],
+        [
+          "sde",
+          "8.8"
+        ],
+        [
+          "personal",
+          "Current CGPA: 8.8."
+        ]
+      ],
+      "aliases": [
+        "gpa",
+        "grades",
+        "cgpa"
+      ],
+      "lookup": {
+        "attribute": "reported CGPA or GPA",
+        "summary": "Ninad’s Full-Stack and AI/ML resumes report a CGPA of 8.78/10. His SDE resume and Personal Knowledge Profile use the rounded value, 8.8/10."
+      }
+    },
+    {
+      "id": "smartleaven",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "WORKED_AT",
+      "to": [
+        "Company",
+        "SmartLeaven Technologies"
+      ],
+      "topics": [
+        "experience",
+        "ai",
+        "backend"
+      ],
+      "text": "Ninad lists a Software Engineer internship at SmartLeaven Technologies in 2026, focused on Python, FastAPI, RAG, and LLM applications. The portfolio and SDE resume list June as the start month, while the Full-Stack and AI/ML resumes list July. The exact start month is unresolved.",
+      "refs": [
+        [
+          "sde",
+          "Jun 2026"
+        ],
+        [
+          "ai",
+          "Jul 2026"
+        ],
+        [
+          "fullstack",
+          "Jul 2026"
+        ],
+        [
+          "personal",
+          "June 2026"
+        ]
+      ],
+      "aliases": [
+        "internship",
+        "SmartLeaven"
+      ],
+      "date": "2026",
+      "lookup": {
+        "attribute": "exact SmartLeaven Technologies start date or start month",
+        "summary": "Ninad’s portfolio and SDE resume list June 2026, while his Full-Stack and AI/ML resumes list July 2026. The exact start month remains unresolved."
+      }
+    },
+    {
+      "id": "smart-role",
+      "from": [
+        "Company",
+        "SmartLeaven Technologies"
+      ],
+      "relation": "HELD_ROLE",
+      "to": [
+        "Role",
+        "Software Engineer Intern"
+      ],
+      "topics": [
+        "experience",
+        "backend"
+      ],
+      "text": "In his SDE and AI/ML resumes, Ninad reports developing Python and FastAPI backend services using Pydantic for structured request validation, schemas, and error handling.",
+      "refs": [
+        [
+          "sde",
+          "schemas and error handling"
+        ],
+        [
+          "ai",
+          "structured validation"
+        ]
+      ],
+      "aliases": [
+        "build backend apis",
+        "rest api",
+        "pydantic"
+      ],
+      "links": [
+        [
+          [
+            "Internship",
+            "SmartLeaven internship"
+          ],
+          "WORKED_AT",
+          [
+            "Company",
+            "SmartLeaven Technologies"
+          ]
+        ],
+        [
+          [
+            "Internship",
+            "SmartLeaven internship"
+          ],
+          "HELD_ROLE",
+          [
+            "Role",
+            "Software Engineer Intern"
+          ]
+        ],
+        [
+          [
+            "Internship",
+            "SmartLeaven internship"
+          ],
+          "USES_TECHNOLOGY",
+          [
+            "Technology",
+            "FastAPI"
+          ]
+        ],
+        [
+          [
+            "Internship",
+            "SmartLeaven internship"
+          ],
+          "DEMONSTRATES_SKILL",
+          [
+            "Skill",
+            "Backend engineering"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "smart-work",
+      "from": [
+        "Internship",
+        "SmartLeaven internship"
+      ],
+      "relation": "CONTRIBUTED_TO",
+      "to": [
+        "TechnicalChallenge",
+        "Document and model workflows"
+      ],
+      "topics": [
+        "experience",
+        "ai",
+        "architecture"
+      ],
+      "text": "Ninad reports building an agricultural advisory RAG pipeline with LangChain and Qdrant, and working on an LLM-powered agent that transformed unstructured job descriptions into structured outputs. He reports experimenting with local language models using Ollama.",
+      "refs": [
+        [
+          "sde",
+          "Job Description Understanding Agent"
+        ],
+        [
+          "personal",
+          "using Ollama"
+        ]
+      ],
+      "aliases": [
+        "local llms",
+        "structured output",
+        "langchain",
+        "qdrant"
+      ]
+    },
+    {
+      "id": "block",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "WORKED_AT",
+      "to": [
+        "Company",
+        "BlockSeBlock"
+      ],
+      "topics": [
+        "experience",
+        "frontend",
+        "ai"
+      ],
+      "text": "Ninad reports developing interactive 3D climate or Earth experiences using React Three Fiber and Three.js at BlockSeBlock, and working on AI-powered speech-to-text features. The sources describe the role as Full Stack & AI Intern or AI & Decentralized Intern, from August through September 2025.",
+      "refs": [
+        [
+          "sde",
+          "Full Stack & AI Intern"
+        ],
+        [
+          "ai",
+          "AI & Decentralized Intern"
+        ],
+        [
+          "personal",
+          "speech-to-text functionality"
+        ]
+      ],
+      "aliases": [
+        "three.js",
+        "internship",
+        "3d earth"
+      ],
+      "date": "2025",
+      "links": [
+        [
+          [
+            "Internship",
+            "BlockSeBlock internship"
+          ],
+          "WORKED_AT",
+          [
+            "Company",
+            "BlockSeBlock"
+          ]
+        ],
+        [
+          [
+            "Internship",
+            "BlockSeBlock internship"
+          ],
+          "DEMONSTRATES_SKILL",
+          [
+            "Skill",
+            "Frontend engineering"
+          ]
+        ],
+        [
+          [
+            "Internship",
+            "BlockSeBlock internship"
+          ],
+          "USES_TECHNOLOGY",
+          [
+            "Technology",
+            "React Three Fiber"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "practice",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "DEMONSTRATES_SKILL",
+      "to": [
+        "Skill",
+        "Data structures and algorithms"
+      ],
+      "topics": [
+        "coding",
+        "tools"
+      ],
+      "text": "Ninad reports practicing data structures and algorithms in C++ and solving 200+ LeetCode problems. He lists arrays, recursion, trees, graphs, dynamic programming, and time and space complexity analysis among his practice topics.",
+      "refs": [
+        [
+          "personal",
+          "200+ problems solved"
+        ],
+        [
+          "sde",
+          "200+ LeetCode problems"
+        ]
+      ],
+      "aliases": [
+        "coding good at coding",
+        "leetcode",
+        "dsa",
+        "algorithmic problem solving",
+        "programming interview"
+      ],
+      "summary": "Ninad reports solving 200+ LeetCode problems in C++ and practicing data structures, algorithms, and time and space complexity analysis."
+    },
+    {
+      "id": "languages",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "DEMONSTRATES_SKILL",
+      "to": [
+        "Skill",
+        "Application development"
+      ],
+      "topics": [
+        "coding",
+        "frontend",
+        "backend",
+        "tools"
+      ],
+      "text": "Ninad describes using C++ for problem-solving and Python and JavaScript/TypeScript for application development. His SDE resume lists React, Next.js, Redux Toolkit, Node.js, Express, FastAPI, REST APIs, and JWT authentication.",
+      "refs": [
+        [
+          "personal",
+          "C++ for problem-solving"
+        ],
+        [
+          "sde",
+          "Authentication (JWT)"
+        ]
+      ],
+      "aliases": [
+        "coding programming languages",
+        "backend apis",
+        "frontend development"
+      ]
+    },
+    {
+      "id": "databases",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "USES_TECHNOLOGY",
+      "to": [
+        "Technology",
+        "Databases"
+      ],
+      "topics": [
+        "backend",
+        "tools",
+        "architecture"
+      ],
+      "text": "Ninad lists PostgreSQL, MongoDB, SQLite, Redis, and Qdrant in his profiles or resumes. Documented project examples include SQLite in TimeBoard, MongoDB in KrishiTrackr, and Qdrant for vector retrieval in AgriRAG. Treat the broader list as reported familiarity.",
+      "refs": [
+        [
+          "fullstack",
+          "Qdrant, MongoDB, PostgreSQL, Redis, SQLite"
+        ],
+        [
+          "engineering",
+          "PostgreSQL, MongoDB, SQLite, and Qdrant"
+        ],
+        [
+          "personal",
+          "SQLite"
+        ]
+      ],
+      "aliases": [
+        "what databases",
+        "databases nosql sql caching"
+      ]
+    },
+    {
+      "id": "timeboard-ownership",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "BUILT",
+      "to": [
+        "Product",
+        "TimeBoard"
+      ],
+      "topics": [
+        "projects",
+        "coding",
+        "delivery"
+      ],
+      "text": "Ninad describes independently taking TimeBoard from idea to implementation, including desktop activity tracking, productivity logic, database integration, and the interface. His two profiles report 50+ active users. The user count is self-reported and has no independent measurement in these sources.",
+      "refs": [
+        [
+          "engineering",
+          "50+ active users"
+        ],
+        [
+          "personal",
+          "50+ active users"
+        ],
+        [
+          "sde",
+          "Session"
+        ]
+      ],
+      "aliases": [
+        "ownership",
+        "independent product",
+        "50 users"
+      ]
+    },
+    {
+      "id": "timeboard-design",
+      "from": [
+        "Product",
+        "TimeBoard"
+      ],
+      "relation": "SOLVED_CHALLENGE",
+      "to": [
+        "TechnicalChallenge",
+        "Desktop session tracking"
+      ],
+      "topics": [
+        "projects",
+        "coding",
+        "architecture",
+        "backend"
+      ],
+      "text": "TimeBoard tracks active windows and detects idle time. Ninad describes filtering short sessions and identifying deep-work periods, and the SDE resume describes SQLite indexing, aggregation, and write-ahead logging (WAL). The public portfolio documents Windows. Resumes call it cross-platform, but other OS support is unconfirmed.",
+      "refs": [
+        [
+          "personal",
+          "filtering very short sessions"
+        ],
+        [
+          "sde",
+          "Write-Ahead Logging"
+        ],
+        [
+          "engineering",
+          "activity monitoring into Electron applications"
+        ]
+      ],
+      "aliases": [
+        "sqlite wal",
+        "desktop architecture",
+        "timeboard windows"
+      ],
+      "links": [
+        [
+          [
+            "Product",
+            "TimeBoard"
+          ],
+          "USES_TECHNOLOGY",
+          [
+            "Technology",
+            "SQLite"
+          ]
+        ],
+        [
+          [
+            "Product",
+            "TimeBoard"
+          ],
+          "DEMONSTRATES_SKILL",
+          [
+            "Skill",
+            "Application development"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "fieldora",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "BUILT",
+      "to": [
+        "Product",
+        "Fieldora"
+      ],
+      "topics": [
+        "projects",
+        "frontend",
+        "delivery"
+      ],
+      "text": "Ninad describes Fieldora as an independently built Chrome extension that uses a locally stored profile for user-controlled autofill. The product is being tested for broader site compatibility.",
+      "refs": [
+        [
+          "personal",
+          "User-controlled autofill"
+        ],
+        [
+          "ai",
+          "Chrome extension for automated form filling"
+        ]
+      ],
+      "aliases": [
+        "ownership",
+        "product ownership",
+        "chrome extension"
+      ]
+    },
+    {
+      "id": "fieldora-challenge",
+      "from": [
+        "Product",
+        "Fieldora"
+      ],
+      "relation": "SOLVED_CHALLENGE",
+      "to": [
+        "TechnicalChallenge",
+        "Dynamic form autofill"
+      ],
+      "topics": [
+        "projects",
+        "frontend",
+        "coding",
+        "architecture"
+      ],
+      "text": "Fieldora handles React-controlled inputs and custom dropdowns. Ninad describes using MutationObserver for dynamically rendered forms and testing compatibility across sites.",
+      "refs": [
+        [
+          "personal",
+          "MutationObserver-based DOM monitoring"
+        ],
+        [
+          "engineering",
+          "using MutationObserver"
+        ],
+        [
+          "ai",
+          "dynamic autofill"
+        ]
+      ],
+      "aliases": [
+        "technical challenges solved",
+        "react dynamic forms"
+      ],
+      "links": [
+        [
+          [
+            "Product",
+            "Fieldora"
+          ],
+          "USES_TECHNOLOGY",
+          [
+            "Technology",
+            "MutationObserver"
+          ]
+        ],
+        [
+          [
+            "Product",
+            "Fieldora"
+          ],
+          "DEMONSTRATES_SKILL",
+          [
+            "Skill",
+            "Frontend engineering"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "agrirag",
+      "from": [
+        "Project",
+        "AgriRAG"
+      ],
+      "relation": "USES_TECHNOLOGY",
+      "to": [
+        "Technology",
+        "Qdrant"
+      ],
+      "topics": [
+        "projects",
+        "backend",
+        "ai",
+        "architecture"
+      ],
+      "text": "Ninad describes AgriRAG as a FastAPI agricultural assistant with PDF ingestion, semantic embedding, Qdrant retrieval, and cited answers. His AI/ML resume reports RAGAS evaluation of retrieval quality, relevance, and faithfulness. The public repository documents the Streamlit UI. Some resume variants also list React, so its role in the released interface is unconfirmed.",
+      "refs": [
+        [
+          "personal",
+          "PDF document ingestion"
+        ],
+        [
+          "ai",
+          "RAGAS evaluation"
+        ],
+        [
+          "fullstack",
+          "Semantic"
+        ]
+      ],
+      "aliases": [
+        "llm rag embeddings architecture",
+        "page citations",
+        "evaluation ragas"
+      ],
+      "links": [
+        [
+          [
+            "Project",
+            "AgriRAG"
+          ],
+          "DEMONSTRATES_SKILL",
+          [
+            "Skill",
+            "Backend engineering"
+          ]
+        ],
+        [
+          [
+            "Project",
+            "AgriRAG"
+          ],
+          "USES_TECHNOLOGY",
+          [
+            "Technology",
+            "FastAPI"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "focus",
+      "from": [
+        "Project",
+        "Focus Detection System"
+      ],
+      "relation": "ACHIEVED",
+      "to": [
+        "Achievement",
+        "Reported computer vision test results"
+      ],
+      "topics": [
+        "projects",
+        "ai",
+        "delivery"
+      ],
+      "text": "Ninad reports training on approximately 5,000 frames, about 92% detection accuracy, and approximately 25 FPS for the tested setup. These are self-reported results, with no independent benchmark supplied.",
+      "refs": [
+        [
+          "personal",
+          "5,000 training frames"
+        ],
+        [
+          "fullstack",
+          "92% detection accuracy"
+        ]
+      ],
+      "aliases": [
+        "accuracy",
+        "25 fps",
+        "benchmark"
+      ],
+      "date": "2025"
+    },
+    {
+      "id": "keyboard",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "BUILT",
+      "to": [
+        "Project",
+        "Invisible Keyboard"
+      ],
+      "topics": [
+        "projects",
+        "coding",
+        "ai"
+      ],
+      "text": "Ninad describes Invisible Keyboard as an experimental Python and OpenCV gesture-based keyboard interaction using camera input.",
+      "refs": [
+        [
+          "personal",
+          "Invisible Keyboard — Computer Vision Project"
+        ]
+      ],
+      "aliases": [
+        "gesture recognition",
+        "computer vision"
+      ]
+    },
+    {
+      "id": "architecture",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "DEMONSTRATES_SKILL",
+      "to": [
+        "ArchitectureDecision",
+        "Engineering process"
+      ],
+      "topics": [
+        "coding",
+        "architecture",
+        "delivery"
+      ],
+      "text": "Ninad describes separating frontend, backend, data storage, and external services, selecting technology from the requirements, and testing integration points. For RAG he considers ingestion, retrieval quality, context relevance, inference, validation, latency, and presentation.",
+      "refs": [
+        [
+          "engineering",
+          "Defining how different components communicate"
+        ],
+        [
+          "engineering",
+          "Retrieval quality"
+        ],
+        [
+          "personal",
+          "architectur"
+        ]
+      ],
+      "aliases": [
+        "engineering philosophy system design architecture decisions"
+      ]
+    },
+    {
+      "id": "debug",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "SOLVED_CHALLENGE",
+      "to": [
+        "TechnicalChallenge",
+        "Debugging across components"
+      ],
+      "topics": [
+        "coding",
+        "architecture",
+        "backend",
+        "ai"
+      ],
+      "text": "Ninad describes reproducing issues, isolating the failing component, and testing fixes. Examples from his engineering profile include inconsistent structured model output, running local models with limited GPU memory, and integrating desktop activity monitoring.",
+      "refs": [
+        [
+          "engineering",
+          "isolate the failing component"
+        ],
+        [
+          "engineering",
+          "limited GPU memory"
+        ]
+      ],
+      "aliases": [
+        "debugging challenges solved",
+        "structured outputs"
+      ]
+    },
+    {
+      "id": "growth",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "INTERESTED_IN",
+      "to": [
+        "CareerInterest",
+        "Engineering growth"
+      ],
+      "topics": [
+        "delivery",
+        "coding",
+        "architecture"
+      ],
+      "text": "Ninad identifies system design, distributed systems, scalability, production engineering, advanced DSA, and cloud infrastructure as areas where he is building depth. These are his stated growth priorities, not independently assessed shortcomings.",
+      "refs": [
+        [
+          "engineering",
+          "production-grade architecture"
+        ],
+        [
+          "personal",
+          "Advanced DSA"
+        ],
+        [
+          "personal",
+          "Cloud infrastructure and MLOps"
+        ]
+      ],
+      "aliases": [
+        "what does he need to improve",
+        "weaknesses",
+        "growth areas"
+      ],
+      "lookup": {
+        "attribute": "Ninad’s own growth areas or what he still wants to improve",
+        "summary": "Ninad identifies system design, distributed systems, scalability, production engineering, advanced data structures and algorithms, and cloud infrastructure as areas he’s working to strengthen. These are priorities he describes in his profiles."
+      }
+    },
+    {
+      "id": "direction",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "INTERESTED_IN",
+      "to": [
+        "CareerInterest",
+        "Independent software products"
+      ],
+      "topics": [
+        "bio",
+        "delivery",
+        "coding"
+      ],
+      "text": "Ninad says he is interested in developer tools, applied AI, productivity software, SaaS, and building independent products. He prefers validating ideas with users and choosing the simplest technology that solves the problem.",
+      "refs": [
+        [
+          "engineering",
+          "choosing the simplest technology"
+        ],
+        [
+          "personal",
+          "validating an idea through real users"
+        ]
+      ],
+      "aliases": [
+        "product building",
+        "saas",
+        "career interests"
+      ]
+    },
+    {
+      "id": "publication",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "ACHIEVED",
+      "to": [
+        "Achievement",
+        "Low-Resistance Meter Circuit publication"
+      ],
+      "topics": [
+        "education",
+        "architecture"
+      ],
+      "text": "The resumes list a February 2025 Low-Resistance Meter Circuit publication in the Grenze International Journal. They describe using a Wheatstone bridge and four-wire Kelvin sensing. The publication and indexing status are reported on the resumes.",
+      "refs": [
+        [
+          "fullstack",
+          "Low-Resistance Meter Circuit"
+        ],
+        [
+          "sde",
+          "Low-Resistance Meter Circuit"
+        ],
+        [
+          "ai",
+          "Low-Resistance Meter Circuit"
+        ]
+      ],
+      "aliases": [
+        "research paper publication"
+      ],
+      "date": "2025-02"
+    },
+    {
+      "id": "outreach",
+      "from": [
+        "Person",
+        "Ninad Patil"
+      ],
+      "relation": "ACHIEVED",
+      "to": [
+        "Achievement",
+        "Technical workshops and open source"
+      ],
+      "topics": [
+        "experience",
+        "education"
+      ],
+      "text": "Ninad's resumes report leading 10+ technical IoT and robotics workshops, reaching 250+ students, and co-organizing the ICBDS International Conference. The SDE resume also reports participating in GirlScript Summer of Code 2025.",
+      "refs": [
+        [
+          "sde",
+          "250+ students"
+        ],
+        [
+          "fullstack",
+          "250+ students"
+        ],
+        [
+          "ai",
+          "250+ students"
+        ],
+        [
+          "sde",
+          "GirlScript Summer of Code"
+        ]
+      ],
+      "aliases": [
+        "leadership",
+        "gssoc open source"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "field": "CGPA",
+      "values": {
+        "personal": "8.8/10",
+        "sde": "8.8/10",
+        "fullstack": "8.78/10",
+        "ai": "8.78/10"
+      },
+      "decision": "Compatible rounding. Cite 8.78/10 as resume-reported with 8.8/10 as rounded."
+    },
+    {
+      "field": "SmartLeaven start",
+      "values": {
+        "personal": "June 2026",
+        "sde": "June 2026",
+        "portfolio": "June 2026",
+        "fullstack": "July 2026",
+        "ai": "July 2026"
+      },
+      "decision": "Unresolved. Use 2026 or explain discrepancy when asked about start month."
+    },
+    {
+      "field": "BlockSeBlock title",
+      "values": {
+        "personal": "Full Stack & AI Intern",
+        "sde": "Full Stack & AI Intern",
+        "fullstack": "AI & Decentralized Intern",
+        "ai": "AI & Decentralized Intern"
+      },
+      "decision": "Unresolved variation. Use neutral internship wording unless title requested."
+    },
+    {
+      "field": "TimeBoard platforms",
+      "values": {
+        "personal": "Windows monitoring",
+        "portfolio": "Windows desktop application",
+        "sde": "Cross-platform",
+        "ai": "Cross-platform",
+        "fullstack": "Cross-platform"
+      },
+      "decision": "Windows documented publicly, other platforms unconfirmed."
+    },
+    {
+      "field": "AgriRAG frontend",
+      "values": {
+        "personal": "Streamlit",
+        "portfolio": "Streamlit documented",
+        "fullstack": "React listed",
+        "ai": "React listed"
+      },
+      "decision": "Streamlit documented. Do not treat React as verified in the released UI."
+    },
+    {
+      "field": "AgriTrackr vs KrishiTrackr architecture",
+      "values": {
+        "sde": "AgriTrackr IoT monitoring with MQTT, Redis, and AWS",
+        "portfolio": "KrishiTrackr agricultural platform with React, Express, and MongoDB"
+      },
+      "decision": "Relationship between architecture variants is unconfirmed. Keep MQTT, Redis, AWS and associated metrics out of KrishiTrackr facts pending review."
+    }
+  ]
+}

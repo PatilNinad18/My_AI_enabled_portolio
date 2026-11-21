@@ -1,0 +1,1929 @@
+{
+  "sources": {
+    "personal": "Personal Knowledge Profile",
+    "engineering": "Engineering & Product-Building Perspective",
+    "fullstack": "Full-Stack Resume",
+    "sde": "SDE Resume",
+    "ai": "AI/ML Resume"
+  },
+  "nodes": [
+    {
+      "id": "person/ninad-patil",
+      "kind": "Person",
+      "name": "Ninad Patil"
+    },
+    {
+      "id": "education/viit-pune",
+      "kind": "Education",
+      "name": "VIIT Pune"
+    },
+    {
+      "id": "source/personal",
+      "kind": "EvidenceSource",
+      "name": "Personal Knowledge Profile"
+    },
+    {
+      "id": "source/sde",
+      "kind": "EvidenceSource",
+      "name": "SDE Resume"
+    },
+    {
+      "id": "achievement/cgpa",
+      "kind": "Achievement",
+      "name": "CGPA"
+    },
+    {
+      "id": "source/fullstack",
+      "kind": "EvidenceSource",
+      "name": "Full-Stack Resume"
+    },
+    {
+      "id": "source/ai",
+      "kind": "EvidenceSource",
+      "name": "AI/ML Resume"
+    },
+    {
+      "id": "company/smartleaven-technologies",
+      "kind": "Company",
+      "name": "SmartLeaven Technologies"
+    },
+    {
+      "id": "role/software-engineer-intern",
+      "kind": "Role",
+      "name": "Software Engineer Intern"
+    },
+    {
+      "id": "internship/smartleaven-internship",
+      "kind": "Internship",
+      "name": "SmartLeaven internship"
+    },
+    {
+      "id": "technology/fastapi",
+      "kind": "Technology",
+      "name": "FastAPI"
+    },
+    {
+      "id": "skill/backend-engineering",
+      "kind": "Skill",
+      "name": "Backend engineering"
+    },
+    {
+      "id": "technicalchallenge/document-and-model-workflows",
+      "kind": "TechnicalChallenge",
+      "name": "Document and model workflows"
+    },
+    {
+      "id": "company/blockseblock",
+      "kind": "Company",
+      "name": "BlockSeBlock"
+    },
+    {
+      "id": "internship/blockseblock-internship",
+      "kind": "Internship",
+      "name": "BlockSeBlock internship"
+    },
+    {
+      "id": "skill/frontend-engineering",
+      "kind": "Skill",
+      "name": "Frontend engineering"
+    },
+    {
+      "id": "technology/react-three-fiber",
+      "kind": "Technology",
+      "name": "React Three Fiber"
+    },
+    {
+      "id": "skill/data-structures-and-algorithms",
+      "kind": "Skill",
+      "name": "Data structures and algorithms"
+    },
+    {
+      "id": "skill/application-development",
+      "kind": "Skill",
+      "name": "Application development"
+    },
+    {
+      "id": "technology/databases",
+      "kind": "Technology",
+      "name": "Databases"
+    },
+    {
+      "id": "source/engineering",
+      "kind": "EvidenceSource",
+      "name": "Engineering & Product-Building Perspective"
+    },
+    {
+      "id": "product/timeboard",
+      "kind": "Product",
+      "name": "TimeBoard"
+    },
+    {
+      "id": "technicalchallenge/desktop-session-tracking",
+      "kind": "TechnicalChallenge",
+      "name": "Desktop session tracking"
+    },
+    {
+      "id": "technology/sqlite",
+      "kind": "Technology",
+      "name": "SQLite"
+    },
+    {
+      "id": "product/fieldora",
+      "kind": "Product",
+      "name": "Fieldora"
+    },
+    {
+      "id": "technicalchallenge/dynamic-form-autofill",
+      "kind": "TechnicalChallenge",
+      "name": "Dynamic form autofill"
+    },
+    {
+      "id": "technology/mutationobserver",
+      "kind": "Technology",
+      "name": "MutationObserver"
+    },
+    {
+      "id": "project/agrirag",
+      "kind": "Project",
+      "name": "AgriRAG"
+    },
+    {
+      "id": "technology/qdrant",
+      "kind": "Technology",
+      "name": "Qdrant"
+    },
+    {
+      "id": "project/focus-detection-system",
+      "kind": "Project",
+      "name": "Focus Detection System"
+    },
+    {
+      "id": "achievement/reported-computer-vision-test-results",
+      "kind": "Achievement",
+      "name": "Reported computer vision test results"
+    },
+    {
+      "id": "project/invisible-keyboard",
+      "kind": "Project",
+      "name": "Invisible Keyboard"
+    },
+    {
+      "id": "architecturedecision/engineering-process",
+      "kind": "ArchitectureDecision",
+      "name": "Engineering process"
+    },
+    {
+      "id": "technicalchallenge/debugging-across-components",
+      "kind": "TechnicalChallenge",
+      "name": "Debugging across components"
+    },
+    {
+      "id": "careerinterest/engineering-growth",
+      "kind": "CareerInterest",
+      "name": "Engineering growth"
+    },
+    {
+      "id": "careerinterest/independent-software-products",
+      "kind": "CareerInterest",
+      "name": "Independent software products"
+    },
+    {
+      "id": "achievement/low-resistance-meter-circuit-publication",
+      "kind": "Achievement",
+      "name": "Low-Resistance Meter Circuit publication"
+    },
+    {
+      "id": "achievement/technical-workshops-and-open-source",
+      "kind": "Achievement",
+      "name": "Technical workshops and open source"
+    }
+  ],
+  "edges": [
+    {
+      "from": "education/viit-pune",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "education",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "10. Education"
+        }
+      ]
+    },
+    {
+      "from": "education/viit-pune",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "education",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "education/viit-pune",
+      "relationship": "STUDIED_AT",
+      "topics": [
+        "bio",
+        "education"
+      ],
+      "aliases": [
+        "studying",
+        "degree",
+        "college"
+      ],
+      "text": "Ninad is studying B.Tech Electronics and Telecommunication Engineering at Vishwakarma Institute of Information Technology (VIIT), Pune, with expected graduation in 2027.",
+      "claim": "education",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "10. Education"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "achievement/cgpa",
+      "to": "source/fullstack",
+      "relationship": "SUPPORTED_BY",
+      "claim": "cgpa",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "achievement/cgpa",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "cgpa",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "achievement/cgpa",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "cgpa",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "achievement/cgpa",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "cgpa",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "10. Education"
+        }
+      ]
+    },
+    {
+      "from": "education/viit-pune",
+      "to": "achievement/cgpa",
+      "relationship": "ACHIEVED",
+      "topics": [
+        "education"
+      ],
+      "aliases": [
+        "gpa",
+        "grades",
+        "cgpa"
+      ],
+      "text": "The Full-Stack and AI/ML resumes report a CGPA of 8.78/10. The SDE resume and Personal Knowledge Profile use the rounded value 8.8/10.",
+      "claim": "cgpa",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "personal",
+          "location": "10. Education"
+        }
+      ],
+      "status": "self-reported",
+      "date": null,
+      "lookup": {
+        "attribute": "reported CGPA or GPA",
+        "summary": "Ninad’s Full-Stack and AI/ML resumes report a CGPA of 8.78/10. His SDE resume and Personal Knowledge Profile use the rounded value, 8.8/10."
+      }
+    },
+    {
+      "from": "company/smartleaven-technologies",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "smartleaven",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "company/smartleaven-technologies",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "smartleaven",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "company/smartleaven-technologies",
+      "to": "source/fullstack",
+      "relationship": "SUPPORTED_BY",
+      "claim": "smartleaven",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "company/smartleaven-technologies",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "smartleaven",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "SmartLeaven Technologies"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "company/smartleaven-technologies",
+      "relationship": "WORKED_AT",
+      "topics": [
+        "experience",
+        "ai",
+        "backend"
+      ],
+      "aliases": [
+        "internship",
+        "SmartLeaven"
+      ],
+      "text": "Ninad lists a Software Engineer internship at SmartLeaven Technologies in 2026, focused on Python, FastAPI, RAG, and LLM applications. The portfolio and SDE resume list June as the start month, while the Full-Stack and AI/ML resumes list July. The exact start month is unresolved.",
+      "claim": "smartleaven",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        },
+        {
+          "source": "personal",
+          "location": "SmartLeaven Technologies"
+        }
+      ],
+      "status": "self-reported",
+      "date": "2026",
+      "lookup": {
+        "attribute": "exact SmartLeaven Technologies start date or start month",
+        "summary": "Ninad’s portfolio and SDE resume list June 2026, while his Full-Stack and AI/ML resumes list July 2026. The exact start month remains unresolved."
+      }
+    },
+    {
+      "from": "role/software-engineer-intern",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "smart-role",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "role/software-engineer-intern",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "smart-role",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "company/smartleaven-technologies",
+      "to": "role/software-engineer-intern",
+      "relationship": "HELD_ROLE",
+      "topics": [
+        "experience",
+        "backend"
+      ],
+      "aliases": [
+        "build backend apis",
+        "rest api",
+        "pydantic"
+      ],
+      "text": "In his SDE and AI/ML resumes, Ninad reports developing Python and FastAPI backend services using Pydantic for structured request validation, schemas, and error handling.",
+      "claim": "smart-role",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "internship/smartleaven-internship",
+      "to": "company/smartleaven-technologies",
+      "relationship": "WORKED_AT",
+      "claim": "smart-role",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "internship/smartleaven-internship",
+      "to": "role/software-engineer-intern",
+      "relationship": "HELD_ROLE",
+      "claim": "smart-role",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "internship/smartleaven-internship",
+      "to": "technology/fastapi",
+      "relationship": "USES_TECHNOLOGY",
+      "claim": "smart-role",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "internship/smartleaven-internship",
+      "to": "skill/backend-engineering",
+      "relationship": "DEMONSTRATES_SKILL",
+      "claim": "smart-role",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "technicalchallenge/document-and-model-workflows",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "smart-work",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "technicalchallenge/document-and-model-workflows",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "smart-work",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "SmartLeaven Technologies"
+        }
+      ]
+    },
+    {
+      "from": "internship/smartleaven-internship",
+      "to": "technicalchallenge/document-and-model-workflows",
+      "relationship": "CONTRIBUTED_TO",
+      "topics": [
+        "experience",
+        "ai",
+        "architecture"
+      ],
+      "aliases": [
+        "local llms",
+        "structured output",
+        "langchain",
+        "qdrant"
+      ],
+      "text": "Ninad reports building an agricultural advisory RAG pipeline with LangChain and Qdrant, and working on an LLM-powered agent that transformed unstructured job descriptions into structured outputs. He reports experimenting with local language models using Ollama.",
+      "claim": "smart-work",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "personal",
+          "location": "SmartLeaven Technologies"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "company/blockseblock",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "block",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "company/blockseblock",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "block",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "company/blockseblock",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "block",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "BlockSeBlock"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "company/blockseblock",
+      "relationship": "WORKED_AT",
+      "topics": [
+        "experience",
+        "frontend",
+        "ai"
+      ],
+      "aliases": [
+        "three.js",
+        "internship",
+        "3d earth"
+      ],
+      "text": "Ninad reports developing interactive 3D climate or Earth experiences using React Three Fiber and Three.js at BlockSeBlock, and working on AI-powered speech-to-text features. The sources describe the role as Full Stack & AI Intern or AI & Decentralized Intern, from August through September 2025.",
+      "claim": "block",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "personal",
+          "location": "BlockSeBlock"
+        }
+      ],
+      "status": "self-reported",
+      "date": "2025"
+    },
+    {
+      "from": "internship/blockseblock-internship",
+      "to": "company/blockseblock",
+      "relationship": "WORKED_AT",
+      "claim": "block",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "personal",
+          "location": "BlockSeBlock"
+        }
+      ],
+      "status": "self-reported",
+      "date": "2025"
+    },
+    {
+      "from": "internship/blockseblock-internship",
+      "to": "skill/frontend-engineering",
+      "relationship": "DEMONSTRATES_SKILL",
+      "claim": "block",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "personal",
+          "location": "BlockSeBlock"
+        }
+      ],
+      "status": "self-reported",
+      "date": "2025"
+    },
+    {
+      "from": "internship/blockseblock-internship",
+      "to": "technology/react-three-fiber",
+      "relationship": "USES_TECHNOLOGY",
+      "claim": "block",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "personal",
+          "location": "BlockSeBlock"
+        }
+      ],
+      "status": "self-reported",
+      "date": "2025"
+    },
+    {
+      "from": "skill/data-structures-and-algorithms",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "practice",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "6. LeetCode & Problem Solving"
+        }
+      ]
+    },
+    {
+      "from": "skill/data-structures-and-algorithms",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "practice",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "skill/data-structures-and-algorithms",
+      "relationship": "DEMONSTRATES_SKILL",
+      "topics": [
+        "coding",
+        "tools"
+      ],
+      "aliases": [
+        "coding good at coding",
+        "leetcode",
+        "dsa",
+        "algorithmic problem solving",
+        "programming interview"
+      ],
+      "text": "Ninad reports practicing data structures and algorithms in C++ and solving 200+ LeetCode problems. He lists arrays, recursion, trees, graphs, dynamic programming, and time and space complexity analysis among his practice topics.",
+      "claim": "practice",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "6. LeetCode & Problem Solving"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null,
+      "summary": "Ninad reports solving 200+ LeetCode problems in C++ and practicing data structures, algorithms, and time and space complexity analysis."
+    },
+    {
+      "from": "skill/application-development",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "languages",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Development Tools & Technologies"
+        }
+      ]
+    },
+    {
+      "from": "skill/application-development",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "languages",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "skill/application-development",
+      "relationship": "DEMONSTRATES_SKILL",
+      "topics": [
+        "coding",
+        "frontend",
+        "backend",
+        "tools"
+      ],
+      "aliases": [
+        "coding programming languages",
+        "backend apis",
+        "frontend development"
+      ],
+      "text": "Ninad describes using C++ for problem-solving and Python and JavaScript/TypeScript for application development. His SDE resume lists React, Next.js, Redux Toolkit, Node.js, Express, FastAPI, REST APIs, and JWT authentication.",
+      "claim": "languages",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Development Tools & Technologies"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "technology/databases",
+      "to": "source/fullstack",
+      "relationship": "SUPPORTED_BY",
+      "claim": "databases",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "technology/databases",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "databases",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "3. Architecture — How do I approach engineering systems?"
+        }
+      ]
+    },
+    {
+      "from": "technology/databases",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "databases",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "TimeBoard — Desktop Productivity Application"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "technology/databases",
+      "relationship": "USES_TECHNOLOGY",
+      "topics": [
+        "backend",
+        "tools",
+        "architecture"
+      ],
+      "aliases": [
+        "what databases",
+        "databases nosql sql caching"
+      ],
+      "text": "Ninad lists PostgreSQL, MongoDB, SQLite, Redis, and Qdrant in his profiles or resumes. Documented project examples include SQLite in TimeBoard, MongoDB in KrishiTrackr, and Qdrant for vector retrieval in AgriRAG. Treat the broader list as reported familiarity.",
+      "claim": "databases",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        },
+        {
+          "source": "engineering",
+          "location": "3. Architecture — How do I approach engineering systems?"
+        },
+        {
+          "source": "personal",
+          "location": "TimeBoard — Desktop Productivity Application"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "product/timeboard",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "timeboard-ownership",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "2. Ownership — What do I personally bring to a project?"
+        }
+      ]
+    },
+    {
+      "from": "product/timeboard",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "timeboard-ownership",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "TimeBoard — Desktop Productivity Application"
+        }
+      ]
+    },
+    {
+      "from": "product/timeboard",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "timeboard-ownership",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "product/timeboard",
+      "relationship": "BUILT",
+      "topics": [
+        "projects",
+        "coding",
+        "delivery"
+      ],
+      "aliases": [
+        "ownership",
+        "independent product",
+        "50 users"
+      ],
+      "text": "Ninad describes independently taking TimeBoard from idea to implementation, including desktop activity tracking, productivity logic, database integration, and the interface. His two profiles report 50+ active users. The user count is self-reported and has no independent measurement in these sources.",
+      "claim": "timeboard-ownership",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "2. Ownership — What do I personally bring to a project?"
+        },
+        {
+          "source": "personal",
+          "location": "TimeBoard — Desktop Productivity Application"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "technicalchallenge/desktop-session-tracking",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "timeboard-design",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "TimeBoard — Desktop Productivity Application"
+        }
+      ]
+    },
+    {
+      "from": "technicalchallenge/desktop-session-tracking",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "timeboard-design",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "technicalchallenge/desktop-session-tracking",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "timeboard-design",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        }
+      ]
+    },
+    {
+      "from": "product/timeboard",
+      "to": "technicalchallenge/desktop-session-tracking",
+      "relationship": "SOLVED_CHALLENGE",
+      "topics": [
+        "projects",
+        "coding",
+        "architecture",
+        "backend"
+      ],
+      "aliases": [
+        "sqlite wal",
+        "desktop architecture",
+        "timeboard windows"
+      ],
+      "text": "TimeBoard tracks active windows and detects idle time. Ninad describes filtering short sessions and identifying deep-work periods, and the SDE resume describes SQLite indexing, aggregation, and write-ahead logging (WAL). The public portfolio documents Windows. Resumes call it cross-platform, but other OS support is unconfirmed.",
+      "claim": "timeboard-design",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "TimeBoard — Desktop Productivity Application"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "product/timeboard",
+      "to": "technology/sqlite",
+      "relationship": "USES_TECHNOLOGY",
+      "claim": "timeboard-design",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "TimeBoard — Desktop Productivity Application"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "product/timeboard",
+      "to": "skill/application-development",
+      "relationship": "DEMONSTRATES_SKILL",
+      "claim": "timeboard-design",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "TimeBoard — Desktop Productivity Application"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "product/fieldora",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "fieldora",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Fieldora — Intelligent Browser Autofill Extension"
+        }
+      ]
+    },
+    {
+      "from": "product/fieldora",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "fieldora",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "product/fieldora",
+      "relationship": "BUILT",
+      "topics": [
+        "projects",
+        "frontend",
+        "delivery"
+      ],
+      "aliases": [
+        "ownership",
+        "product ownership",
+        "chrome extension"
+      ],
+      "text": "Ninad describes Fieldora as an independently built Chrome extension that uses a locally stored profile for user-controlled autofill. The product is being tested for broader site compatibility.",
+      "claim": "fieldora",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Fieldora — Intelligent Browser Autofill Extension"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "technicalchallenge/dynamic-form-autofill",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "fieldora-challenge",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Fieldora — Intelligent Browser Autofill Extension"
+        }
+      ]
+    },
+    {
+      "from": "technicalchallenge/dynamic-form-autofill",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "fieldora-challenge",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        }
+      ]
+    },
+    {
+      "from": "technicalchallenge/dynamic-form-autofill",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "fieldora-challenge",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "product/fieldora",
+      "to": "technicalchallenge/dynamic-form-autofill",
+      "relationship": "SOLVED_CHALLENGE",
+      "topics": [
+        "projects",
+        "frontend",
+        "coding",
+        "architecture"
+      ],
+      "aliases": [
+        "technical challenges solved",
+        "react dynamic forms"
+      ],
+      "text": "Fieldora handles React-controlled inputs and custom dropdowns. Ninad describes using MutationObserver for dynamically rendered forms and testing compatibility across sites.",
+      "claim": "fieldora-challenge",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Fieldora — Intelligent Browser Autofill Extension"
+        },
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "product/fieldora",
+      "to": "technology/mutationobserver",
+      "relationship": "USES_TECHNOLOGY",
+      "claim": "fieldora-challenge",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Fieldora — Intelligent Browser Autofill Extension"
+        },
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "product/fieldora",
+      "to": "skill/frontend-engineering",
+      "relationship": "DEMONSTRATES_SKILL",
+      "claim": "fieldora-challenge",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Fieldora — Intelligent Browser Autofill Extension"
+        },
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "technology/qdrant",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "agrirag",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "AgriRAG — AI Agricultural Assistant"
+        }
+      ]
+    },
+    {
+      "from": "technology/qdrant",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "agrirag",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "technology/qdrant",
+      "to": "source/fullstack",
+      "relationship": "SUPPORTED_BY",
+      "claim": "agrirag",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "project/agrirag",
+      "to": "technology/qdrant",
+      "relationship": "USES_TECHNOLOGY",
+      "topics": [
+        "projects",
+        "backend",
+        "ai",
+        "architecture"
+      ],
+      "aliases": [
+        "llm rag embeddings architecture",
+        "page citations",
+        "evaluation ragas"
+      ],
+      "text": "Ninad describes AgriRAG as a FastAPI agricultural assistant with PDF ingestion, semantic embedding, Qdrant retrieval, and cited answers. His AI/ML resume reports RAGAS evaluation of retrieval quality, relevance, and faithfulness. The public repository documents the Streamlit UI. Some resume variants also list React, so its role in the released interface is unconfirmed.",
+      "claim": "agrirag",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "AgriRAG — AI Agricultural Assistant"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "project/agrirag",
+      "to": "skill/backend-engineering",
+      "relationship": "DEMONSTRATES_SKILL",
+      "claim": "agrirag",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "AgriRAG — AI Agricultural Assistant"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "project/agrirag",
+      "to": "technology/fastapi",
+      "relationship": "USES_TECHNOLOGY",
+      "claim": "agrirag",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "AgriRAG — AI Agricultural Assistant"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "achievement/reported-computer-vision-test-results",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "focus",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Focus Detection System"
+        }
+      ]
+    },
+    {
+      "from": "achievement/reported-computer-vision-test-results",
+      "to": "source/fullstack",
+      "relationship": "SUPPORTED_BY",
+      "claim": "focus",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "project/focus-detection-system",
+      "to": "achievement/reported-computer-vision-test-results",
+      "relationship": "ACHIEVED",
+      "topics": [
+        "projects",
+        "ai",
+        "delivery"
+      ],
+      "aliases": [
+        "accuracy",
+        "25 fps",
+        "benchmark"
+      ],
+      "text": "Ninad reports training on approximately 5,000 frames, about 92% detection accuracy, and approximately 25 FPS for the tested setup. These are self-reported results, with no independent benchmark supplied.",
+      "claim": "focus",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Focus Detection System"
+        },
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": "2025"
+    },
+    {
+      "from": "project/invisible-keyboard",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "keyboard",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Invisible Keyboard — Computer Vision Project"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "project/invisible-keyboard",
+      "relationship": "BUILT",
+      "topics": [
+        "projects",
+        "coding",
+        "ai"
+      ],
+      "aliases": [
+        "gesture recognition",
+        "computer vision"
+      ],
+      "text": "Ninad describes Invisible Keyboard as an experimental Python and OpenCV gesture-based keyboard interaction using camera input.",
+      "claim": "keyboard",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "Invisible Keyboard — Computer Vision Project"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "architecturedecision/engineering-process",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "architecture",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "3. Architecture — How do I approach engineering systems?"
+        }
+      ]
+    },
+    {
+      "from": "architecturedecision/engineering-process",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "architecture",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "3. Architecture — How do I approach engineering systems?"
+        }
+      ]
+    },
+    {
+      "from": "architecturedecision/engineering-process",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "architecture",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "1. Who I Am"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "architecturedecision/engineering-process",
+      "relationship": "DEMONSTRATES_SKILL",
+      "topics": [
+        "coding",
+        "architecture",
+        "delivery"
+      ],
+      "aliases": [
+        "engineering philosophy system design architecture decisions"
+      ],
+      "text": "Ninad describes separating frontend, backend, data storage, and external services, selecting technology from the requirements, and testing integration points. For RAG he considers ingestion, retrieval quality, context relevance, inference, validation, latency, and presentation.",
+      "claim": "architecture",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "3. Architecture — How do I approach engineering systems?"
+        },
+        {
+          "source": "engineering",
+          "location": "3. Architecture — How do I approach engineering systems?"
+        },
+        {
+          "source": "personal",
+          "location": "1. Who I Am"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "technicalchallenge/debugging-across-components",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "debug",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        }
+      ]
+    },
+    {
+      "from": "technicalchallenge/debugging-across-components",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "debug",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "technicalchallenge/debugging-across-components",
+      "relationship": "SOLVED_CHALLENGE",
+      "topics": [
+        "coding",
+        "architecture",
+        "backend",
+        "ai"
+      ],
+      "aliases": [
+        "debugging challenges solved",
+        "structured outputs"
+      ],
+      "text": "Ninad describes reproducing issues, isolating the failing component, and testing fixes. Examples from his engineering profile include inconsistent structured model output, running local models with limited GPU memory, and integrating desktop activity monitoring.",
+      "claim": "debug",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        },
+        {
+          "source": "engineering",
+          "location": "4. Challenges — How do I approach difficult technical problems?"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "careerinterest/engineering-growth",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "growth",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "3. Architecture — How do I approach engineering systems?"
+        }
+      ]
+    },
+    {
+      "from": "careerinterest/engineering-growth",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "growth",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "11. Future Goals"
+        }
+      ]
+    },
+    {
+      "from": "careerinterest/engineering-growth",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "growth",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "11. Future Goals"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "careerinterest/engineering-growth",
+      "relationship": "INTERESTED_IN",
+      "topics": [
+        "delivery",
+        "coding",
+        "architecture"
+      ],
+      "aliases": [
+        "what does he need to improve",
+        "weaknesses",
+        "growth areas"
+      ],
+      "text": "Ninad identifies system design, distributed systems, scalability, production engineering, advanced DSA, and cloud infrastructure as areas where he is building depth. These are his stated growth priorities, not independently assessed shortcomings.",
+      "claim": "growth",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "3. Architecture — How do I approach engineering systems?"
+        },
+        {
+          "source": "personal",
+          "location": "11. Future Goals"
+        },
+        {
+          "source": "personal",
+          "location": "11. Future Goals"
+        }
+      ],
+      "status": "self-reported",
+      "date": null,
+      "lookup": {
+        "attribute": "Ninad’s own growth areas or what he still wants to improve",
+        "summary": "Ninad identifies system design, distributed systems, scalability, production engineering, advanced data structures and algorithms, and cloud infrastructure as areas he’s working to strengthen. These are priorities he describes in his profiles."
+      }
+    },
+    {
+      "from": "careerinterest/independent-software-products",
+      "to": "source/engineering",
+      "relationship": "SUPPORTED_BY",
+      "claim": "direction",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "1. Problem — What problems do I like solving?"
+        }
+      ]
+    },
+    {
+      "from": "careerinterest/independent-software-products",
+      "to": "source/personal",
+      "relationship": "SUPPORTED_BY",
+      "claim": "direction",
+      "evidence": [
+        {
+          "source": "personal",
+          "location": "7. My SaaS & Product-Building Mindset"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "careerinterest/independent-software-products",
+      "relationship": "INTERESTED_IN",
+      "topics": [
+        "bio",
+        "delivery",
+        "coding"
+      ],
+      "aliases": [
+        "product building",
+        "saas",
+        "career interests"
+      ],
+      "text": "Ninad says he is interested in developer tools, applied AI, productivity software, SaaS, and building independent products. He prefers validating ideas with users and choosing the simplest technology that solves the problem.",
+      "claim": "direction",
+      "evidence": [
+        {
+          "source": "engineering",
+          "location": "1. Problem — What problems do I like solving?"
+        },
+        {
+          "source": "personal",
+          "location": "7. My SaaS & Product-Building Mindset"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    },
+    {
+      "from": "achievement/low-resistance-meter-circuit-publication",
+      "to": "source/fullstack",
+      "relationship": "SUPPORTED_BY",
+      "claim": "publication",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "achievement/low-resistance-meter-circuit-publication",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "publication",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "achievement/low-resistance-meter-circuit-publication",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "publication",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "achievement/low-resistance-meter-circuit-publication",
+      "relationship": "ACHIEVED",
+      "topics": [
+        "education",
+        "architecture"
+      ],
+      "aliases": [
+        "research paper publication"
+      ],
+      "text": "The resumes list a February 2025 Low-Resistance Meter Circuit publication in the Grenze International Journal. They describe using a Wheatstone bridge and four-wire Kelvin sensing. The publication and indexing status are reported on the resumes.",
+      "claim": "publication",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": "2025-02"
+    },
+    {
+      "from": "achievement/technical-workshops-and-open-source",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "outreach",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "achievement/technical-workshops-and-open-source",
+      "to": "source/fullstack",
+      "relationship": "SUPPORTED_BY",
+      "claim": "outreach",
+      "evidence": [
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "achievement/technical-workshops-and-open-source",
+      "to": "source/ai",
+      "relationship": "SUPPORTED_BY",
+      "claim": "outreach",
+      "evidence": [
+        {
+          "source": "ai",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "achievement/technical-workshops-and-open-source",
+      "to": "source/sde",
+      "relationship": "SUPPORTED_BY",
+      "claim": "outreach",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ]
+    },
+    {
+      "from": "person/ninad-patil",
+      "to": "achievement/technical-workshops-and-open-source",
+      "relationship": "ACHIEVED",
+      "topics": [
+        "experience",
+        "education"
+      ],
+      "aliases": [
+        "leadership",
+        "gssoc open source"
+      ],
+      "text": "Ninad's resumes report leading 10+ technical IoT and robotics workshops, reaching 250+ students, and co-organizing the ICBDS International Conference. The SDE resume also reports participating in GirlScript Summer of Code 2025.",
+      "claim": "outreach",
+      "evidence": [
+        {
+          "source": "sde",
+          "location": "p. 1"
+        },
+        {
+          "source": "fullstack",
+          "location": "p. 1"
+        },
+        {
+          "source": "ai",
+          "location": "p. 1"
+        },
+        {
+          "source": "sde",
+          "location": "p. 1"
+        }
+      ],
+      "status": "self-reported",
+      "date": null
+    }
+  ],
+  "conflicts": [
+    {
+      "field": "CGPA",
+      "values": {
+        "personal": "8.8/10",
+        "sde": "8.8/10",
+        "fullstack": "8.78/10",
+        "ai": "8.78/10"
+      },
+      "decision": "Compatible rounding. Cite 8.78/10 as resume-reported with 8.8/10 as rounded."
+    },
+    {
+      "field": "SmartLeaven start",
+      "values": {
+        "personal": "June 2026",
+        "sde": "June 2026",
+        "portfolio": "June 2026",
+        "fullstack": "July 2026",
+        "ai": "July 2026"
+      },
+      "decision": "Unresolved. Use 2026 or explain discrepancy when asked about start month."
+    },
+    {
+      "field": "BlockSeBlock title",
+      "values": {
+        "personal": "Full Stack & AI Intern",
+        "sde": "Full Stack & AI Intern",
+        "fullstack": "AI & Decentralized Intern",
+        "ai": "AI & Decentralized Intern"
+      },
+      "decision": "Unresolved variation. Use neutral internship wording unless title requested."
+    },
+    {
+      "field": "TimeBoard platforms",
+      "values": {
+        "personal": "Windows monitoring",
+        "portfolio": "Windows desktop application",
+        "sde": "Cross-platform",
+        "ai": "Cross-platform",
+        "fullstack": "Cross-platform"
+      },
+      "decision": "Windows documented publicly, other platforms unconfirmed."
+    },
+    {
+      "field": "AgriRAG frontend",
+      "values": {
+        "personal": "Streamlit",
+        "portfolio": "Streamlit documented",
+        "fullstack": "React listed",
+        "ai": "React listed"
+      },
+      "decision": "Streamlit documented. Do not treat React as verified in the released UI."
+    },
+    {
+      "field": "AgriTrackr vs KrishiTrackr architecture",
+      "values": {
+        "sde": "AgriTrackr IoT monitoring with MQTT, Redis, and AWS",
+        "portfolio": "KrishiTrackr agricultural platform with React, Express, and MongoDB"
+      },
+      "decision": "Relationship between architecture variants is unconfirmed. Keep MQTT, Redis, AWS and associated metrics out of KrishiTrackr facts pending review."
+    }
+  ]
+}
