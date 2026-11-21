@@ -48,9 +48,9 @@
 .badge:hover svg { color: var(--accent); }
 
 @media (prefers-reduced-motion: no-preference) {
-  .track { animation: marquee 39s linear infinite; }
+  .track[data-marquee-started] { animation: marquee 39s linear infinite; }
   .row[data-direction='right'] .track { animation-direction: reverse; animation-duration: 42s; }
-  .row:hover .track, .row:focus-within .track { animation-play-state: paused; }
+  .track:not([data-marquee-visible]), .row:hover .track, .row:focus-within .track { animation-play-state: paused; }
   @keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
 }
 

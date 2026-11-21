@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
-import { citationKey, historyLimit, questionLimit, readLines, type ChatEvent, type Citation, type ConversationTurn } from '@/lib/assistant/protocol';
+import { contextLimit, isPublicLink, questionLimit, readLines, type ChatStreamEvent, type ConversationTurn, type PublicLink } from '@/lib/assistant/protocol';
 import RobotScene from './RobotScene';
 import MessageText from './MessageText';
 import styles from '@/styles/assistant.module.scss';
@@ -14,27 +14,31 @@ const suggestions = [
   ['Coding experience', 'Is he good at coding?'],
 ] as const;
 
-class ChatFailure extends Error {}
+class ChatFailure extends Error {
+  constructor(message: string, readonly retryAfter = 0) { super(message); }
+}
 
-type Message = { id: string; role: 'user' | 'assistant'; text: string; sources: Citation[] };
+type Message = { id: string; role: 'user' | 'assistant'; text: string; links: PublicLink[]; grounded?: boolean };
+type Retry = { question: string; turnId: string; readyAt: number };
 const storageKey = 'ninad-ai-v1-conversation';
 const messageLimit = 24;
-
-function safeCitation(value: unknown): value is Citation {
-  if (!value || typeof value !== 'object') return false;
-  const { href, title } = value as Citation;
-  return typeof title === 'string' && (href === undefined || (typeof href === 'string' && (/^\/(?![\\/])/.test(href) || /^https:\/\//.test(href))));
-}
 
 function restoreMessages(): Message[] {
   try {
     const history: unknown = JSON.parse(sessionStorage.getItem(storageKey) ?? '[]');
     if (!Array.isArray(history)) return [];
-    return history.slice(-messageLimit).filter((message): message is Message =>
-      message && typeof message.id === 'string' && ['user', 'assistant'].includes(message.role) &&
-      typeof message.text === 'string' && message.text.length > 0 && message.text.length <= 3000 &&
-      Array.isArray(message.sources) && message.sources.every(safeCitation),
-    );
+    return history.slice(-messageLimit).flatMap((message): Message[] => {
+      if (!message || typeof message.id !== 'string' || !['user', 'assistant'].includes(message.role)
+        || typeof message.text !== 'string' || !message.text.trim() || message.text.length > 4000) return [];
+      const legacySources: unknown[] = Array.isArray(message.sources) ? message.sources : [];
+      const links: unknown[] = Array.isArray(message.links) ? message.links : legacySources;
+      return [{
+        id: message.id, role: message.role, text: message.text,
+        links: links.filter(isPublicLink).slice(0, 3),
+        grounded: message.grounded === true || legacySources.some((source) =>
+          source && typeof source === 'object' && 'title' in source && typeof source.title === 'string'),
+      }];
+    });
   } catch { return []; }
 }
 
@@ -44,6 +48,7 @@ export default function NinadChat() {
   const [draft, setDraft] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [retry, setRetry] = useState<Retry | null>(null);
   const [notice, setNotice] = useState('');
   const request = useRef<AbortController | null>(null);
   const end = useRef<HTMLDivElement>(null);
@@ -97,6 +102,16 @@ export default function NinadChat() {
     input.current.style.height = `${input.current.scrollHeight}px`;
   }, [draft, active]);
 
+  useEffect(() => {
+    if (!retry?.readyAt) return;
+    const delay = retry.readyAt - Date.now();
+    if (delay > 2_147_483_647) return;
+    const timer = setTimeout(() => {
+      setRetry((current) => current === retry ? { ...current, readyAt: 0 } : current);
+    }, Math.max(0, delay));
+    return () => clearTimeout(timer);
+  }, [retry]);
+
   function cancel() {
     request.current?.abort();
     request.current = null;
@@ -111,34 +126,41 @@ export default function NinadChat() {
     setMessages([]);
     setDraft('');
     setError('');
+    setRetry(null);
     setNotice('Conversation cleared.');
     input.current?.focus();
   }
 
-  async function send(value: string) {
+  async function send(value: string, retrying?: Retry) {
     const question = value.trim();
     if (!restored || !question || question.length > questionLimit || request.current) return;
     const controller = new AbortController();
     request.current = controller;
     const replyId = crypto.randomUUID();
-    const history = messages.flatMap<ConversationTurn>((message, index) => {
-      const reply = messages[index + 1];
-      if (message.role !== 'user' || reply?.role !== 'assistant' || !reply.sources.length) return [];
+    const turnId = retrying?.turnId ?? crypto.randomUUID();
+    const prior = retrying ? messages.findIndex(({ id }) => id === turnId) : -1;
+    const earlier = prior >= 0 ? messages.slice(0, prior) : messages;
+    const history = earlier.flatMap<ConversationTurn>((message, index) => {
+      const reply = earlier[index + 1];
+      if (message.role !== 'user' || reply?.role !== 'assistant' || !reply.grounded) return [];
       return [{ question: message.text, answer: reply.text.slice(0, questionLimit) }];
-    }).slice(-historyLimit);
+    }).slice(-contextLimit);
     autoScroll.current = true;
     setAway(false);
     setDraft('');
     setError('');
+    setRetry(null);
     setNotice('');
     setBusy(true);
-    setMessages((current) => {
-      const last = current.at(-1);
-      const turns = error && last?.role === 'user' && last.text === question
-        ? current
-        : [...current, { id: crypto.randomUUID(), role: 'user' as const, text: question, sources: [] }];
-      return [...turns, { id: replyId, role: 'assistant' as const, text: '', sources: [] }].slice(-messageLimit);
-    });
+    const turns: Message[] = [...earlier, { id: turnId, role: 'user', text: question, links: [] },
+      { id: replyId, role: 'assistant', text: '', links: [] }];
+    setMessages(turns.slice(-messageLimit));
+
+    function showRetry(message: string, retryAfter = 0) {
+      const readyAt = Number.isFinite(retryAfter) && retryAfter > 0 ? Date.now() + retryAfter * 1000 : 0;
+      setError(message);
+      setRetry({ question, turnId, readyAt });
+    }
 
     try {
       const response = await fetch('/api/assistant', {
@@ -147,27 +169,36 @@ export default function NinadChat() {
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
-        throw new ChatFailure(typeof data.message === 'string' ? data.message : 'The chat is unavailable. Please try again.');
+        throw new ChatFailure(typeof data.message === 'string' ? data.message : 'The chat is unavailable. Please try again.',
+          Number(response.headers.get('Retry-After')));
       }
       if (!response.body) throw new ChatFailure('No response was received. Please try again.');
       let done = false;
       for await (const line of readLines(response.body)) {
         if (controller.signal.aborted) return;
-        const event = JSON.parse(line) as ChatEvent;
-        if (event.type === 'error') setError(event.message);
+        const event = JSON.parse(line) as ChatStreamEvent;
+        if (event.type === 'error') showRetry(event.message);
+        if (event.type === 'notice') {
+          const minutes = event.retryAfter && Math.ceil(event.retryAfter / 60);
+          const wait = minutes ? ` You can retry in about ${minutes} ${minutes === 1 ? 'minute' : 'minutes'}.` : '';
+          showRetry(event.message + wait, event.retryAfter);
+        }
         if (event.type === 'done') done = true;
         if (event.type === 'chunk') {
           setMessages((current) => current.map((message) => message.id === replyId ? {
             ...message,
             text: [message.text, event.text].filter(Boolean).join('\n\n'),
-            sources: [...new Map([...message.sources, ...event.sources.filter(safeCitation)].map((source) => [citationKey(source), source])).values()],
+            grounded: message.grounded || event.grounded,
+            links: [...new Map([...message.links, ...event.links.filter(isPublicLink)].map((link) => [link.href, link])).values()].slice(0, 3),
           } : message));
         }
       }
       if (!done) throw new ChatFailure('The response was interrupted. Please try again.');
     } catch (failure) {
-      if (!controller.signal.aborted) setError(failure instanceof ChatFailure
-        ? failure.message : 'Could not reach the chat. Please try again.');
+      if (!controller.signal.aborted) {
+        if (failure instanceof ChatFailure) showRetry(failure.message, failure.retryAfter);
+        else showRetry('Could not reach the chat. Please try again.');
+      }
     } finally {
       if (request.current === controller) {
         request.current = null;
@@ -208,24 +239,21 @@ export default function NinadChat() {
         <div className={styles.log} role="log" aria-label="Conversation" tabIndex={0}>
           {messages.map((message) => {
             if (!message.text) return null;
-            const links = message.sources.filter((source) => source.href).slice(0, 3);
-            const references = message.sources.filter((source) => !source.href).slice(0, 5);
             return (
               <article key={message.id} className={styles.message} data-role={message.role}>
                 <p className={styles.author}>{message.role === 'user' ? 'You' : 'Ninad AI'}</p>
                 {message.role === 'assistant' ? <MessageText text={message.text} /> : <div className={styles.userText}>{message.text}</div>}
-                {links.length > 0 && (
-                  <ul className={styles.sources} aria-label="Source links">
-                    {links.map(({ href, title }) => (
+                {message.links.length > 0 && (
+                  <ul className={styles.sources} aria-label="Related links">
+                    {message.links.map(({ href, title }) => (
                       <li key={href}><a href={href} target="_blank" rel="noopener noreferrer">{title} <span aria-hidden="true">↗</span></a></li>
                     ))}
                   </ul>
                 )}
-                {references.length > 0 && <p className={styles.references}>Source documents · {references.map(({ title }) => title).join(' · ')}</p>}
               </article>
             );
           })}
-          {busy && <p className={styles.processing}><span className={styles.signal} aria-hidden="true" />{messages.at(-1)?.text ? 'Checking the rest of the answer…' : 'Finding relevant sources…'}</p>}
+          {busy && <p className={styles.processing}><span className={styles.signal} aria-hidden="true" />{messages.at(-1)?.text ? 'Finishing up…' : 'Thinking…'}</p>}
           <div ref={end} />
         </div>
       )}
@@ -238,7 +266,13 @@ export default function NinadChat() {
             scrollToLatest();
           }}>Jump to latest <span aria-hidden="true">↓</span></button>
         )}
-        {error && <p className={styles.error} role="alert">{error}</p>}
+        {error && (
+          <div className={styles.error}>
+            <p role="status">{error}</p>
+            {retry && <button className={styles.textButton} type="button" disabled={busy || Boolean(retry.readyAt)}
+              onClick={() => void send(retry.question, retry)}>{retry.readyAt ? 'Retry later' : 'Retry'}</button>}
+          </div>
+        )}
         <p className={styles.srOnly} role="status">{notice}</p>
         <form className={styles.composer} onSubmit={submit}>
           <label className={styles.srOnly} htmlFor="assistant-question">Ask Ninad AI</label>

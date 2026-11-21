@@ -49,6 +49,7 @@
 .globe { min-width: 0; position: relative; padding-bottom: 2.75rem; }
 .globeViewport {
   position: relative;
+  content-visibility: auto;
   width: 100%;
   height: clamp(25rem, 43vw, 34.5rem);
 }
@@ -60,7 +61,7 @@
 }
 .globeViewport canvas { visibility: hidden; pointer-events: none; }
 .globeFallback {
-  background: url('/images/about-constellation.webp') center / contain no-repeat;
+  object-fit: contain;
   pointer-events: none;
 }
 .globeViewport[data-rendering] canvas { visibility: visible; }

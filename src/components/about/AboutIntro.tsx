@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import AboutMotion from '@/components/about/AboutMotion';
 import DisciplineSelector from '@/components/about/DisciplineSelector';
 import ParticleGlobe from '@/components/about/ParticleGlobe';
 import styles from '@/styles/about.module.scss';
@@ -7,7 +6,6 @@ import styles from '@/styles/about.module.scss';
 export default function AboutIntro() {
   return (
     <section id="about" className={`${styles.page} ${styles.masthead}`} data-about-intro aria-labelledby="about-intro" tabIndex={-1}>
-      <AboutMotion region="intro" />
       <div className={styles.eyebrow}>
         <h2 id="about-intro" className={styles.annotation}>Three disciplines. One perspective.</h2>
         <p className={styles.annotation}>Chapters 01–04</p>

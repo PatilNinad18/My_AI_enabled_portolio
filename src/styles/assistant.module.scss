@@ -100,16 +100,19 @@
 .log { display: flex; flex: 1 0 auto; flex-direction: column; gap: clamp(1.15rem, 2.5vw, 1.65rem); padding: 1.35rem 0 1.1rem; outline-offset: .2rem; }
 .message { width: min(100%, 50rem); align-self: flex-start; overflow-wrap: anywhere; }
 .message[data-role='user'] { width: fit-content; max-width: min(90%, 43rem); align-self: flex-end; padding: .62rem .95rem; border: 1px solid #d99c7038; border-radius: .95rem .95rem .22rem .95rem; background: #281a13; }
-.author { color: #ffa481; margin-bottom: .2rem; }
+.author { color: #ffa481; margin-bottom: .35rem; }
 .userText { white-space: pre-wrap; }
-.messageText { font-size: clamp(.96rem, 1.45vw, 1.06rem); line-height: 1.72; }
-.messageText > * + * { margin-top: .62em; }
-.messageText :is(ul, ol) { padding-left: 1.35rem; }
+.messageText { max-inline-size: 72ch; font-size: clamp(.96rem, 1.45vw, 1.06rem); line-height: 1.65; }
+.messageText > * + * { margin-block-start: .65em; }
+.messageText :is(ul, ol) { margin-block-end: 0; padding-inline-start: 1.35em; }
+.messageText li + li { margin-block-start: .3em; }
+.messageText li::marker { color: #f1ac89; }
+.messageHeading { font-size: 1em; font-weight: 650; line-height: 1.4; }
 .messageText strong { color: #ffe4cf; }
-.sources { display: flex; flex-wrap: wrap; gap: .25rem .85rem; padding: 0; margin: .45rem 0 0; list-style: none; }
-.sources a { display: inline-flex; align-items: center; gap: .3rem; min-height: 36px; color: #e5c7b5; font: .76rem/1.45 var(--mono); text-decoration: underline; text-underline-offset: .16rem; }
+.sources { display: flex; flex-wrap: wrap; gap: 0 1rem; padding: 0; margin: .55rem 0 0; list-style: none; }
+.sources li { min-width: 0; }
+.sources a { display: inline-flex; align-items: center; gap: .3rem; min-height: 36px; color: #e5c7b5; font-size: .84rem; line-height: 1.45; text-decoration: underline; text-underline-offset: .16rem; }
 .sources a:hover { color: var(--accent); }
-.references { color: #c6b1a5; font-size: .77rem; margin-top: .35rem; }
 .processing { gap: .55rem; align-self: flex-start; }
 
 .dock {
@@ -186,6 +189,9 @@
   .sceneLabels { bottom: .2rem; max-width: calc(100% - 10rem); gap: .15rem; flex-wrap: wrap; }
   .sceneLabels span { font-size: .53rem; letter-spacing: .055em; padding: .18rem .28rem; }
   .sceneTools { bottom: 3.25rem; }
+  .message[data-role='user'] { max-width: 94%; padding-inline: .8rem; }
+  .messageText :is(ul, ol) { padding-inline-start: 1.15em; }
+  .sources a { min-height: 44px; }
   .composer { gap: .2rem; }
   .composer textarea { padding-left: .46rem; }
   .composer button { min-width: 3.8rem; }

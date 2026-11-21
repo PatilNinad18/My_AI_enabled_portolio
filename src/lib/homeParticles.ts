@@ -1,10 +1,3 @@
-import {
-  BufferAttribute, BufferGeometry, CanvasTexture, Euler, LinearFilter, LineSegments,
-  Matrix3, Matrix4, Mesh, OrthographicCamera, Points, Scene,
-  ShaderMaterial, Vector2, Vector3, Vector4, WebGLRenderer,
-} from 'three';
-import { makeGlobeGeometry } from '@/lib/aboutGlobe';
-
 const coordinates = `
 uniform vec2 uViewport;
 uniform vec4 uPortrait;
@@ -34,10 +27,10 @@ vec4 screenPoint(vec2 p) {
 
 const vertex = `
 ${coordinates}
-attribute vec4 aPortrait;
-attribute vec2 aNetwork;
-attribute float aSeed;
-varying vec4 vColor;
+in vec4 aPortrait;
+in vec2 aNetwork;
+in float aSeed;
+out vec4 vColor;
 void main() {
   float peeled = smoothstep(release(aPortrait.xy) - .025, release(aPortrait.xy) + .13, uArrival);
   float journey = smoothstep(release(aPortrait.xy), 1., uArrival);
@@ -97,7 +90,8 @@ const fragment = `
 uniform vec2 uViewport;
 uniform float uDpr;
 uniform float uContact;
-varying vec4 vColor;
+in vec4 vColor;
+out vec4 colorOutput;
 void main() {
   // The shared viewport canvas can never draw over the contact section.
   if (uViewport.y - gl_FragCoord.y / uDpr >= uContact) discard;
@@ -105,12 +99,12 @@ void main() {
 #ifndef NETWORK_LINES
   alpha *= 1. - smoothstep(.13, .5, length(gl_PointCoord - .5));
 #endif
-  gl_FragColor = vec4(vColor.rgb, alpha);
+  colorOutput = vec4(vColor.rgb, alpha);
 }
 `;
 const imageVertex = `
 ${coordinates}
-varying vec2 vHome;
+out vec2 vHome;
 void main() {
   vHome = position.xy;
   gl_Position = screenPoint(portraitPoint(position.xy));
@@ -119,12 +113,13 @@ void main() {
 const imageFragment = `
 ${coordinates}
 uniform sampler2D uImage;
-varying vec2 vHome;
+in vec2 vHome;
+out vec4 colorOutput;
 void main() {
-  vec4 color = texture2D(uImage, vHome * vec2(.5, -.5) + .5);
+  vec4 color = texture(uImage, vHome * vec2(.5, -.5) + .5);
   float peel = smoothstep(release(vHome) - .025, release(vHome) + .13, uArrival);
   float light = dot(color.rgb, vec3(.213, .715, .072));
-  gl_FragColor = vec4(vec3(light), color.a * (1. - peel));
+  colorOutput = vec4(vec3(light), color.a * (1. - peel));
 }
 `;
 
@@ -153,12 +148,11 @@ function portraitTargets(image: HTMLImageElement, count: number) {
   for (let index = 0; index < count; index++) {
     const offset = candidates[index % candidates.length];
     const pixel = offset / 4;
-    targets.set([
-      ((pixel % sample.width) + .5) / sample.width * 2 - 1,
-      1 - (Math.floor(pixel / sample.width) + .5) / sample.height * 2,
-      (.213 * pixels[offset] + .715 * pixels[offset + 1] + .072 * pixels[offset + 2]) / 255,
-      pixels[offset + 3] / 255,
-    ], index * 4);
+    const target = index * 4;
+    targets[target] = ((pixel % sample.width) + .5) / sample.width * 2 - 1;
+    targets[target + 1] = 1 - (Math.floor(pixel / sample.width) + .5) / sample.height * 2;
+    targets[target + 2] = (.213 * pixels[offset] + .715 * pixels[offset + 1] + .072 * pixels[offset + 2]) / 255;
+    targets[target + 3] = pixels[offset + 3] / 255;
   }
   return targets;
 }
@@ -168,7 +162,175 @@ function smooth(start: number, end: number, value: number) {
   return t * t * (3 - 2 * t);
 }
 
-export async function mountHomeParticles(root: HTMLElement, canvas: HTMLCanvasElement, signal: AbortSignal) {
+type Coordinates = {
+  viewport: [number, number];
+  portrait: [number, number, number, number];
+  globe: [number, number, number, number];
+  rotation: Float32Array<ArrayBuffer>;
+  pointer: [number, number, number];
+  focus: [number, number, number];
+  arrival: number; network: number; exit: number; time: number;
+  scroll: number; dpr: number; contact: number; lens: number;
+};
+
+const attributeNames = ['position', 'aPortrait', 'aNetwork', 'aSeed'] as const;
+const uniformNames = ['uViewport', 'uPortrait', 'uGlobe', 'uRotation', 'uPointer', 'uFocus', 'uArrival',
+  'uNetwork', 'uExit', 'uTime', 'uScroll', 'uDpr', 'uContact', 'uLens'] as const;
+
+function createRenderer(gl: WebGL2RenderingContext, image: HTMLImageElement, columns: number, rows: number) {
+  const programs: WebGLProgram[] = [];
+  const buffers: WebGLBuffer[] = [];
+  const arrays: WebGLVertexArrayObject[] = [];
+  let texture: WebGLTexture | null = null;
+
+  const dispose = () => {
+    for (const array of arrays) gl.deleteVertexArray(array);
+    for (const buffer of buffers) gl.deleteBuffer(buffer);
+    for (const program of programs) gl.deleteProgram(program);
+    gl.deleteTexture(texture);
+  };
+
+  function program(vertexSource: string, fragmentSource: string, defines = '') {
+    const handle = gl.createProgram();
+    if (!handle) throw new Error('Cannot allocate particle shader');
+    programs.push(handle);
+    const shaders: WebGLShader[] = [];
+    try {
+      for (const [type, body] of [[gl.VERTEX_SHADER, 'in vec3 position;\n' + vertexSource], [gl.FRAGMENT_SHADER, fragmentSource]] as const) {
+        const shader = gl.createShader(type);
+        if (!shader) throw new Error('Cannot allocate particle shader');
+        shaders.push(shader);
+        gl.shaderSource(shader, '#version 300 es\nprecision highp float;\n' + defines + '\n' + body);
+        gl.compileShader(shader);
+        gl.attachShader(handle, shader);
+      }
+      attributeNames.forEach((name, location) => gl.bindAttribLocation(handle, location, name));
+      gl.linkProgram(handle);
+      if (!gl.getProgramParameter(handle, gl.LINK_STATUS)) {
+        throw new Error(shaders.map((shader) => gl.getShaderInfoLog(shader)).filter(Boolean).join(' ') || 'Cannot link particle shader');
+      }
+      const location = Object.fromEntries(uniformNames.map((name) => [name, gl.getUniformLocation(handle, name)])) as
+        Record<(typeof uniformNames)[number], WebGLUniformLocation | null>;
+      return (coordinates: Coordinates) => {
+        gl.useProgram(handle);
+        gl.uniform2fv(location.uViewport, coordinates.viewport);
+        gl.uniform4fv(location.uPortrait, coordinates.portrait);
+        gl.uniform4fv(location.uGlobe, coordinates.globe);
+        gl.uniformMatrix3fv(location.uRotation, false, coordinates.rotation);
+        gl.uniform3fv(location.uPointer, coordinates.pointer);
+        gl.uniform3fv(location.uFocus, coordinates.focus);
+        gl.uniform1f(location.uArrival, coordinates.arrival);
+        gl.uniform1f(location.uNetwork, coordinates.network);
+        gl.uniform1f(location.uExit, coordinates.exit);
+        gl.uniform1f(location.uTime, coordinates.time);
+        gl.uniform1f(location.uScroll, coordinates.scroll);
+        gl.uniform1f(location.uDpr, coordinates.dpr);
+        gl.uniform1f(location.uContact, coordinates.contact);
+        gl.uniform1f(location.uLens, coordinates.lens);
+      };
+    } finally {
+      for (const shader of shaders) gl.deleteShader(shader);
+    }
+  }
+
+  function vertexArray() {
+    const array = gl.createVertexArray();
+    if (!array) throw new Error('Cannot allocate particle vertices');
+    arrays.push(array);
+    gl.bindVertexArray(array);
+    return array;
+  }
+
+  function upload(target: number, values: Float32Array<ArrayBuffer> | Uint16Array<ArrayBuffer>) {
+    const buffer = gl.createBuffer();
+    if (!buffer) throw new Error('Cannot allocate particle buffer');
+    buffers.push(buffer);
+    gl.bindBuffer(target, buffer);
+    gl.bufferData(target, values, gl.STATIC_DRAW);
+  }
+
+  function attribute(location: number, size: number, values: Float32Array<ArrayBuffer>) {
+    upload(gl.ARRAY_BUFFER, values);
+    gl.enableVertexAttribArray(location);
+    gl.vertexAttribPointer(location, size, gl.FLOAT, false, 0, 0);
+  }
+
+  try {
+    const count = columns * rows;
+    const sphere = new Float32Array(count * 3);
+    const seeds = new Float32Array(count);
+    const net = new Float32Array(count * 2);
+    const links: number[] = [];
+    const angle = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < count; i++) {
+      const sample = i * 6043 % count;
+      const y = 1 - 2 * (sample + .5) / count;
+      const ring = Math.sqrt(1 - y * y);
+      const x = Math.cos(sample * angle) * ring;
+      const z = Math.sin(sample * angle) * ring;
+      const relief = 1 + .012 * Math.sin(x * 21 + y * 17) * Math.cos(z * 18 - y * 8);
+      sphere[i * 3] = x * relief;
+      sphere[i * 3 + 1] = y * relief;
+      sphere[i * 3 + 2] = z * relief;
+      seeds[i] = (i * .754877666 + .37) % 1;
+      const row = Math.floor(i / columns);
+      const col = i % columns;
+      net[i * 2] = col / (columns - 1);
+      net[i * 2 + 1] = row / (rows - 1);
+      if (row % 2 || col % 2) continue;
+      if (col + 2 < columns) links.push(i, i + 2);
+      if (row + 2 < rows) links.push(i, i + 2 * columns);
+    }
+
+    const particles = vertexArray();
+    attribute(0, 3, sphere);
+    attribute(1, 4, portraitTargets(image, count));
+    attribute(2, 2, net);
+    attribute(3, 1, seeds);
+    upload(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(links));
+
+    const portrait = vertexArray();
+    attribute(0, 3, new Float32Array([-1,-1,0, 1,-1,0, -1,1,0, 1,1,0]));
+    texture = gl.createTexture();
+    if (!texture) throw new Error('Cannot allocate portrait texture');
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    const bindPhoto = program(imageVertex, imageFragment);
+    const bindPoints = program(vertex, fragment);
+    let bindLines: ReturnType<typeof program> | undefined;
+    gl.clearColor(0, 0, 0, 0);
+    gl.enable(gl.BLEND);
+    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+    return {
+      render(coordinates: Coordinates) {
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        if (coordinates.arrival < .5) {
+          bindPhoto(coordinates);
+          gl.bindVertexArray(portrait);
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        }
+        gl.bindVertexArray(particles);
+        if (coordinates.arrival > 0 && coordinates.exit < 1) {
+          bindPoints(coordinates);
+          gl.drawArrays(gl.POINTS, 0, count);
+        }
+        if (coordinates.network > .62 && coordinates.exit < 1) {
+          bindLines ??= program(vertex, fragment, '#define NETWORK_LINES 1');
+          bindLines(coordinates);
+          gl.drawElements(gl.LINES, links.length, gl.UNSIGNED_SHORT, 0);
+        }
+      },
+      dispose,
+    };
+  } catch (error) {
+    dispose();
+    throw error;
+  }
+}
+
+export async function mountHomeParticles(root: HTMLElement, canvas: HTMLCanvasElement, signal: AbortSignal, onUnavailable: () => void) {
   const image = root.querySelector<HTMLImageElement>('[data-portrait-image]');
   const photo = root.querySelector<HTMLElement>('[data-portrait-frame]');
   const stage = root.querySelector<HTMLElement>('[data-globe-transition]');
@@ -178,141 +340,116 @@ export async function mountHomeParticles(root: HTMLElement, canvas: HTMLCanvasEl
   if (!image || !photo || !stage || !pin || !globe || !contact) return;
   await image.decode();
   if (signal.aborted) return;
-  const context = canvas.getContext('webgl2', { alpha: true, antialias: false, depth: false });
-  if (!context) return;
-  const renderer = new WebGLRenderer({ canvas, context, alpha: true, antialias: false });
-  renderer.setClearColor(0, 0);
-  const scene = new Scene();
-  const camera = new OrthographicCamera(-1, 1, 1, -1, .1, 10);
-  camera.position.z = 2;
-  const columns = innerWidth < 700 ? 70 : 112;
-  const rows = innerWidth < 700 ? 90 : 100;
-  const count = columns * rows;
-  const geometry = makeGlobeGeometry(count);
-  geometry.setAttribute('aPortrait', new BufferAttribute(portraitTargets(image, count), 4));
-  const net = new Float32Array(count * 2);
-  const links: number[] = [];
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < columns; col++) {
-      const index = row * columns + col;
-      net.set([col / (columns - 1), row / (rows - 1)], index * 2);
-      if (row % 2 || col % 2) continue;
-      if (col + 2 < columns) links.push(index, index + 2);
-      if (row + 2 < rows) links.push(index, index + 2 * columns);
-    }
-  }
-  geometry.setAttribute('aNetwork', new BufferAttribute(net, 2));
-  const uniforms = {
-    uViewport: { value: new Vector2() }, uPortrait: { value: new Vector4() },
-    uGlobe: { value: new Vector4() }, uArrival: { value: 0 }, uNetwork: { value: 0 },
-    uExit: { value: 0 }, uTime: { value: 0 }, uScroll: { value: 0 }, uDpr: { value: 1 },
-    uContact: { value: 0 }, uPointer: { value: new Vector3(-1000, -1000, 0) },
-    uFocus: { value: new Vector3(0, 0, 1) }, uLens: { value: 0 },
-    uRotation: { value: new Matrix3() },
+  const gl = canvas.getContext('webgl2', { alpha: true, antialias: false, depth: false });
+  if (!gl) return;
+  const mobile = innerWidth < 700;
+  const compact = mobile && (navigator.hardwareConcurrency || 4) <= 4;
+  const columns = compact ? 56 : mobile ? 70 : 112;
+  const rows = compact ? 72 : mobile ? 90 : 100;
+  const map: Coordinates = {
+    viewport: [1, 1], portrait: [0, 0, 0, 0], globe: [0, 0, 1, 3.54],
+    rotation: new Float32Array(9), pointer: [-1000, -1000, 0], focus: [0, 0, 1],
+    arrival: 0, network: 0, exit: 0, time: 0, scroll: window.scrollY, dpr: 1, contact: 0, lens: 0,
   };
-  const options = { uniforms, vertexShader: vertex, fragmentShader: fragment, transparent: true, depthTest: false, depthWrite: false };
-  const material = new ShaderMaterial(options);
-  const points = new Points(geometry, material);
-  points.frustumCulled = false;
-  const lineGeometry = new BufferGeometry();
-  for (const [name, attribute] of Object.entries(geometry.attributes)) lineGeometry.setAttribute(name, attribute);
-  lineGeometry.setIndex(links);
-  const lineMaterial = new ShaderMaterial({ ...options, defines: { NETWORK_LINES: 1 } });
-  const lines = new LineSegments(lineGeometry, lineMaterial);
-  lines.frustumCulled = false;
-  const photoSurface = document.createElement('canvas');
-  photoSurface.width = image.naturalWidth;
-  photoSurface.height = image.naturalHeight;
-  photoSurface.getContext('2d')!.drawImage(image, 0, 0);
-  const texture = new CanvasTexture(photoSurface);
-  texture.minFilter = LinearFilter;
-  texture.generateMipmaps = false;
-  texture.flipY = false;
-  texture.needsUpdate = true;
-  const quad = new BufferGeometry();
-  quad.setAttribute('position', new BufferAttribute(new Float32Array([-1,-1,0, 1,-1,0, -1,1,0, 1,1,0]), 3));
-  quad.setIndex([0,1,2,2,1,3]);
-  const photoMaterial = new ShaderMaterial({
-    ...options, uniforms: { ...uniforms, uImage: { value: texture } }, vertexShader: imageVertex, fragmentShader: imageFragment,
-  });
-  const portrait = new Mesh(quad, photoMaterial);
-  portrait.frustumCulled = false;
-  portrait.renderOrder = 0;
-  points.renderOrder = 1;
-  lines.renderOrder = 2;
-  scene.add(portrait, points, lines);
-  const rotation = new Matrix4();
-  const euler = new Euler();
-  const pointer = { x: -1000, y: -1000, active: false };
-  let frame = 0, last = 0, disposed = false, lost = false;
-  let width = 0, height = 0, scroll = window.scrollY;
+  let renderer: ReturnType<typeof createRenderer> | undefined;
+  let frame = 0, last = 0, displayed = false, lost = false, failed = false;
+  let dirty = true, continuous = false;
   let arrive = 1, contactTop = 0;
+  let pointerActive = false;
 
   function measure() {
-    width = document.documentElement.clientWidth;
-    height = innerHeight;
-    const dpr = Math.min(devicePixelRatio, width < 700 ? 1.15 : 1.5);
-    renderer.setPixelRatio(dpr);
-    renderer.setSize(width, height, false);
-    uniforms.uViewport.value.set(width, height);
-    uniforms.uDpr.value = dpr;
+    const width = document.documentElement.clientWidth;
+    const height = innerHeight;
+    const dpr = Math.min(devicePixelRatio, mobile ? 1 : 1.5);
+    const w = Math.max(1, Math.round(width * dpr));
+    const h = Math.max(1, Math.round(height * dpr));
+    if (canvas.width !== w) canvas.width = w;
+    if (canvas.height !== h) canvas.height = h;
+    gl!.viewport(0, 0, w, h);
+    map.viewport = [width, height];
+    map.dpr = dpr;
     const bounds = globe!.getBoundingClientRect();
-    // Use the original document position even when GSAP has pinned the globe in the viewport.
     const top = stage!.getBoundingClientRect().top + window.scrollY + bounds.top - pin!.getBoundingClientRect().top;
     arrive = Math.max(height * .65, top + bounds.height / 2 - height * .58);
     contactTop = contact!.getBoundingClientRect().top + window.scrollY;
+    dirty = true;
     requestDraw();
   }
 
   function requestDraw() {
-    if (!frame && !disposed && !lost && !document.hidden) frame = requestAnimationFrame(draw);
+    if (!frame && !signal.aborted && !lost && !failed && !document.hidden) frame = requestAnimationFrame(draw);
   }
 
   function draw(now: number) {
     frame = 0;
-    if (disposed || lost) return;
+    const height = map.viewport[1];
+    const scroll = map.scroll;
+    if (scroll <= 0 || scroll >= contactTop - height * .08) {
+      if (displayed) gl!.clear(gl!.COLOR_BUFFER_BIT);
+      if (scroll <= 0) root.removeAttribute('data-journey-ready');
+      displayed = false;
+      continuous = false;
+      last = 0;
+      return;
+    }
+    if (compact && continuous && !dirty && now - last < 32) { requestDraw(); return; }
     const delta = last ? Math.min((now - last) / 1000, .05) : 0;
     last = now;
     const a = smooth(0, arrive, scroll);
-    const n = uniforms.uNetwork.value;
-    const exit = smooth(contactTop - height * .85, contactTop - height * .08, scroll);
-    uniforms.uArrival.value = a;
-    uniforms.uExit.value = exit;
-    uniforms.uScroll.value = scroll;
-    uniforms.uContact.value = contactTop - scroll;
-    uniforms.uTime.value += delta;
-    euler.set(.20, -.36 + uniforms.uTime.value * .12, -.19);
-    uniforms.uRotation.value.setFromMatrix4(rotation.makeRotationFromEuler(euler));
-    const p = photo!.getBoundingClientRect();
-    const fit = Math.min(p.width / image!.naturalWidth, p.height / image!.naturalHeight);
-    const photoY = Math.max(height * .24, p.top + p.height / 2)
-      + height * .12 * smooth(0, arrive * .55, scroll);
-    uniforms.uPortrait.value.set(p.left + p.width / 2, photoY, image!.naturalWidth * fit, image!.naturalHeight * fit);
-    const g = globe!.getBoundingClientRect();
-    // Keep the traveling cloud inside the viewport until its actual destination arrives.
-    const centerY = Math.min(g.top + g.height / 2, height * .78);
-    const distance = 3.54 * Math.max(1, .92 / (g.width / g.height));
-    uniforms.uGlobe.value.set(g.left + g.width / 2, centerY, g.height / (2 * Math.tan(19 * Math.PI / 180)), distance);
-    const radius = uniforms.uGlobe.value.z / Math.sqrt(distance * distance - 1);
-    const px = (pointer.x - (g.left + g.width / 2)) / radius;
-    const py = (centerY - pointer.y) / radius;
-    const onSphere = pointer.active && a > .99 && n < .01 && px * px + py * py < 1;
-    if (onSphere) uniforms.uFocus.value.set(px, py, Math.sqrt(1 - px * px - py * py)).normalize();
-    uniforms.uLens.value += (Number(onSphere) - uniforms.uLens.value) * (1 - Math.exp(-delta * 10));
-    uniforms.uPointer.value.x = pointer.x;
-    uniforms.uPointer.value.y = pointer.y;
-    uniforms.uPointer.value.z += (Number(pointer.active) - uniforms.uPointer.value.z) * (1 - Math.exp(-delta * 9));
-    portrait.visible = a < .5;
-    lines.visible = n > 0 && exit < 1;
-    points.visible = a > 0 && exit < 1;
-    renderer.render(scene, camera);
-    if (!root.hasAttribute('data-journey-ready')) root.setAttribute('data-journey-ready', '');
-    if (scroll > 0 && exit < 1) requestDraw();
+    map.arrival = a;
+    map.exit = smooth(contactTop - height * .85, contactTop - height * .08, scroll);
+    map.contact = contactTop - scroll;
+    map.time += delta;
+    if (dirty) {
+      const p = photo!.getBoundingClientRect();
+      const fit = Math.min(p.width / image!.naturalWidth, p.height / image!.naturalHeight);
+      map.portrait = [p.left + p.width / 2, Math.max(height * .24, p.top + p.height / 2)
+        + height * .12 * smooth(0, arrive * .55, scroll), image!.naturalWidth * fit, image!.naturalHeight * fit];
+      const g = globe!.getBoundingClientRect();
+      map.globe = [g.left + g.width / 2, Math.min(g.top + g.height / 2, height * .78),
+        g.height / (2 * Math.tan(19 * Math.PI / 180)), 3.54 * Math.max(1, .92 / (g.width / g.height))];
+      dirty = false;
+    }
+    const cosX = .9800665778, sinX = .1986693308, cosZ = .9820042351, sinZ = -.188858895;
+    const y = -.36 + map.time * .12;
+    const cosY = Math.cos(y), sinY = Math.sin(y);
+    map.rotation.set([
+      cosY * cosZ, cosX * sinZ + sinX * cosZ * sinY, sinX * sinZ - cosX * cosZ * sinY,
+      -cosY * sinZ, cosX * cosZ - sinX * sinZ * sinY, sinX * cosZ + cosX * sinZ * sinY,
+      sinY, -sinX * cosY, cosX * cosY,
+    ]);
+    const radius = map.globe[2] / Math.sqrt(map.globe[3] * map.globe[3] - 1);
+    const px = (map.pointer[0] - map.globe[0]) / radius;
+    const py = (map.globe[1] - map.pointer[1]) / radius;
+    const onSphere = pointerActive && a > .99 && map.network < .01 && px * px + py * py < 1;
+    if (onSphere) map.focus = [px, py, Math.sqrt(1 - px * px - py * py)];
+    map.lens += (Number(onSphere) - map.lens) * (1 - Math.exp(-delta * 10));
+    map.pointer[2] += (Number(pointerActive) - map.pointer[2]) * (1 - Math.exp(-delta * 9));
+
+    try {
+      renderer ??= createRenderer(gl!, image!, columns, rows);
+      renderer.render(map);
+    } catch {
+      failed = true;
+      renderer?.dispose();
+      renderer = undefined;
+      root.removeAttribute('data-journey-ready');
+      onUnavailable();
+      return;
+    }
+    if (!displayed) root.setAttribute('data-journey-ready', '');
+    displayed = true;
+    // Near the top the portrait barely changes except during scrolling.
+    continuous = map.network > 0 || a > .35;
+    if (continuous) requestDraw();
+    else last = 0;
   }
 
   canvas.addEventListener('webglcontextlost', (event) => {
     event.preventDefault();
     lost = true;
+    renderer = undefined;
+    displayed = false;
     cancelAnimationFrame(frame);
     frame = 0;
     root.removeAttribute('data-journey-ready');
@@ -320,12 +457,12 @@ export async function mountHomeParticles(root: HTMLElement, canvas: HTMLCanvasEl
   canvas.addEventListener('webglcontextrestored', () => { lost = false; measure(); }, { signal });
   root.addEventListener('pointermove', (event) => {
     if (event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
-    pointer.x = event.clientX;
-    pointer.y = event.clientY;
-    pointer.active = true;
-    requestDraw();
+    map.pointer[0] = event.clientX;
+    map.pointer[1] = event.clientY;
+    pointerActive = true;
+    if (continuous) requestDraw();
   }, { passive: true, signal });
-  root.addEventListener('pointerleave', () => { pointer.active = false; requestDraw(); }, { signal });
+  root.addEventListener('pointerleave', () => { pointerActive = false; }, { signal });
   document.addEventListener('visibilitychange', () => {
     cancelAnimationFrame(frame);
     frame = 0;
@@ -333,27 +470,18 @@ export async function mountHomeParticles(root: HTMLElement, canvas: HTMLCanvasEl
     requestDraw();
   }, { signal });
   signal.addEventListener('abort', () => {
-    disposed = true;
     cancelAnimationFrame(frame);
-    geometry.dispose();
-    lineGeometry.dispose();
-    quad.dispose();
-    material.dispose();
-    lineMaterial.dispose();
-    photoMaterial.dispose();
-    texture.dispose();
-    renderer.dispose();
+    renderer?.dispose();
     root.removeAttribute('data-journey-ready');
   }, { once: true });
+
   measure();
   return {
     measure,
-    update(value: number) {
-      scroll = value;
-      requestDraw();
-    },
-    setNetwork(progress: number) {
-      uniforms.uNetwork.value = progress;
+    update(value: number, network: number) {
+      dirty ||= value !== map.scroll || network !== map.network;
+      map.scroll = value;
+      map.network = network;
       requestDraw();
     },
   };

@@ -1,10 +1,17 @@
 import type { Metadata } from 'next';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
+import localFont from 'next/font/local';
 import Navigation from '@/components/Navigation';
 import SiteFooter from '@/components/SiteFooter';
 import { faviconPath } from '@/content/assetPaths';
 import '@/styles/global.scss';
+
+const GeistSans = localFont({
+  src: '../fonts/Geist-Latin.woff2', variable: '--font-geist-sans', weight: '100 900', display: 'swap',
+});
+const GeistMono = localFont({
+  src: '../fonts/GeistMono-Latin.woff2', variable: '--font-geist-mono', weight: '100 900',
+  display: 'swap', preload: false, adjustFontFallback: false, fallback: ['ui-monospace', 'Consolas', 'monospace'],
+});
 
 export const metadata: Metadata = {
   title: { default: 'Ninad Patil · Full-Stack & AI Engineer', template: '%s · Ninad Patil' },

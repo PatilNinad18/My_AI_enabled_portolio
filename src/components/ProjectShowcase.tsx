@@ -39,9 +39,10 @@ export default function ProjectShowcase() {
   const selected = useSyncExternalStore(subscribe, getSelection, getInitialSelection);
   const previous = useRef(selected);
   const resultsId = useId();
+  const section = useRef<HTMLElement>(null);
   const results = useRef<HTMLDivElement>(null);
   const visible = projects[selected];
-  const screenshots = useProjectScreenshots();
+  const screenshots = useProjectScreenshots(section);
 
   useEffect(() => {
     if (previous.current === selected) return;
@@ -64,7 +65,7 @@ export default function ProjectShowcase() {
   }, [selected]);
 
   return (
-    <section id="projects" className={styles.section} aria-labelledby="home-work" tabIndex={-1}>
+    <section id="projects" ref={section} className={styles.section} aria-labelledby="home-work" tabIndex={-1}>
       <header className={styles.intro}>
         <h2 id="home-work" className={styles.title} data-heading-reveal>My Projects</h2>
         <blockquote className={styles.quote} data-reveal onPointerMove={moveQuoteHighlight}
@@ -84,7 +85,8 @@ export default function ProjectShowcase() {
               </div>
               <div className={styles.preview}>
                 <div className={styles.previewSurface}>
-                  <ProjectScreenshot project={project} available={screenshots.has(project.screenshot)} />
+                  <ProjectScreenshot project={project} available={screenshots.has(project.screenshot)}
+                    sizes="(max-width: 770px) 90vw, (max-width: 1550px) 45vw, 700px" />
                 </div>
               </div>
             </div>

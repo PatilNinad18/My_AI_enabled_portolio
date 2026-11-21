@@ -36,6 +36,12 @@ main { min-height: 65vh; }
   z-index: 1;
   pointer-events: none;
 }
+[data-globe-transition][data-motion-pinned]::after {
+  content: '';
+  display: block;
+  height: var(--globe-distance);
+}
+[data-motion-pinned] > [data-globe-pin] { position: sticky; top: var(--globe-top); }
 [data-home][data-journey-ready] {
   [data-hero], section[aria-labelledby='home-work'] { isolation: auto; }
   [data-hero-sequence] {
@@ -50,6 +56,8 @@ main { min-height: 65vh; }
   > section > * { position: relative; z-index: 2; }
 }
 @media (prefers-reduced-motion: reduce) {
+  [data-globe-transition][data-motion-pinned]::after { display: none; }
+  [data-motion-pinned] > [data-globe-pin] { position: static; }
   .homeParticles { display: none; }
 }
 

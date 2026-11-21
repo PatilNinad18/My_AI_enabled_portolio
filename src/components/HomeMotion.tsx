@@ -2,6 +2,59 @@
 
 import { useEffect } from 'react';
 
+type Journey = Awaited<ReturnType<typeof import('@/lib/homeParticles')['mountHomeParticles']>>;
+const ease = 'cubic-bezier(.22, .7, .2, 1)';
+
+function sectionReveals(root: HTMLElement) {
+  const active = new Map<Element, Animation>();
+  const repeat = '[data-heading-reveal], #contact-title';
+  const tracks = root.querySelectorAll('[data-marquee-track]');
+  const marqueeVisibility = new IntersectionObserver((entries) => {
+    for (const { target, isIntersecting } of entries) {
+      if (isIntersecting) target.setAttribute('data-marquee-started', '');
+      target.toggleAttribute('data-marquee-visible', isIntersecting);
+    }
+  });
+  tracks.forEach((track) => marqueeVisibility.observe(track));
+  const observer = new IntersectionObserver((entries) => {
+    for (const { target, isIntersecting } of entries) {
+      if (!isIntersecting) continue;
+      const heading = target.matches(repeat);
+      const feature = target.matches('[data-feature-card]');
+      const experience = target.matches('[data-experience-card]');
+      const about = target.matches('[data-about-reveal]');
+      const distance = heading ? 60 : feature || experience ? 24 : about ? 13 : 20;
+      const opacity = heading ? 0 : about || experience ? .65 : 1;
+      const lines = target.querySelectorAll('[data-contact-line]');
+      const items = lines.length ? [...lines] : [experience && target.firstElementChild ? target.firstElementChild : target];
+      for (const [index, item] of items.entries()) {
+        active.get(item)?.cancel();
+        const animation = item.animate(
+          [{ transform: `translateY(${distance}px)`, opacity }, { transform: 'translateY(0)', opacity: 1 }],
+          { duration: heading ? 900 : 700, delay: index * 100, easing: ease },
+        );
+        active.set(item, animation);
+        animation.onfinish = () => active.delete(item);
+      }
+      if (!heading) observer.unobserve(target);
+    }
+  }, { rootMargin: '0px 0px -6% 0px' });
+
+  root.querySelectorAll('[data-reveal], [data-about-reveal], [data-feature-card], [data-experience-card], [data-heading-reveal]')
+    .forEach((element) => observer.observe(element));
+  const contact = document.getElementById('contact-title');
+  if (contact) observer.observe(contact);
+  return () => {
+    observer.disconnect();
+    marqueeVisibility.disconnect();
+    for (const track of tracks) {
+      track.removeAttribute('data-marquee-started');
+      track.removeAttribute('data-marquee-visible');
+    }
+    for (const animation of active.values()) animation.cancel();
+  };
+}
+
 export default function HomeMotion() {
   useEffect(() => {
     const root = document.querySelector<HTMLElement>('[data-home]');
@@ -14,179 +67,124 @@ export default function HomeMotion() {
     const globe = pin?.querySelector<HTMLElement>('[data-globe-stage]');
     if (!root || !sequence || !hero || !canvas || !stage || !about || !pin || !globe) return;
 
-    const preference = window.matchMedia('(prefers-reduced-motion: no-preference)');
-    let dispose: (() => void) | undefined;
-    let generation = 0;
+    const preference = matchMedia('(prefers-reduced-motion: no-preference)');
+    const desktop = matchMedia('(min-width: 1100px) and (min-height: 720px)');
+    const header = document.querySelector<HTMLElement>('[data-site-header]');
+    const timeline = root.querySelector<HTMLElement>('[data-timeline]');
+    const line = timeline?.querySelector<HTMLElement>('[data-progress]');
+    let cleanup: (() => void) | undefined;
 
-    const configure = () => {
-      const current = ++generation;
-      dispose?.();
-      dispose = undefined;
+    function configure() {
+      cleanup?.();
       if (!preference.matches) return;
-      void Promise.all([import('gsap'), import('gsap/ScrollTrigger'), import('@/lib/homeParticles')])
-        .then(async ([{ gsap }, { ScrollTrigger }, { mountHomeParticles }]) => {
-          if (current !== generation) return;
-          gsap.registerPlugin(ScrollTrigger);
+      const events = new AbortController();
+      const { signal } = events;
+      const stopReveals = sectionReveals(root!);
+      let frame = 0, measuring = true, requested = false;
+      let journey: Journey;
+      let start = 0, distance = 1, timelineStart = 0, timelineLength = 1;
+      let previousProgress = -1;
 
-          const portrait = new AbortController();
-          dispose = () => portrait.abort();
-          const journey = await mountHomeParticles(root, canvas, portrait.signal).catch(() => undefined);
-          if (current !== generation) return;
+      function removePin() {
+        stage!.removeAttribute('data-motion-pinned');
+        stage!.style.removeProperty('--globe-top');
+        stage!.style.removeProperty('--globe-distance');
+      }
 
-          const header = document.querySelector('[data-site-header]');
-          const desktop = window.matchMedia('(min-width: 1100px) and (min-height: 720px) and (scripting: enabled)');
-          let headerHeight = 0;
-          const measure = () => {
-            headerHeight = header?.getBoundingClientRect().height ?? 0;
-            const fits = hero.offsetHeight + headerHeight <= window.innerHeight + 2;
-            const pinned = desktop.matches && fits;
-            sequence.toggleAttribute('data-pinned', pinned);
-            sequence.toggleAttribute('data-unpinned', !pinned);
-            sequence.style.setProperty('--pin-top', `${headerHeight}px`);
-          };
-          if (journey) measure();
-          else sequence.setAttribute('data-unpinned', '');
+      function unavailable() {
+        journey = undefined;
+        removePin();
+        sequence!.setAttribute('data-unpinned', '');
+        measuring = true;
+        schedule();
+      }
 
-          const context = gsap.context((scope) => {
-            gsap.from('[data-hero-line]', { y: 22, duration: .85, stagger: .095, ease: 'power3.out' });
-            if (journey) {
-              const formation = { progress: 0 };
-              gsap.to(formation, {
-                progress: 1,
-                ease: 'none',
-                onUpdate: () => journey.setNetwork(formation.progress),
-                scrollTrigger: {
-                  trigger: stage,
-                  pin,
-                  pinSpacing: true,
-                  scrub: true,
-                  start: () => {
-                    const stageTop = stage.getBoundingClientRect().top + window.scrollY;
-                    const bounds = globe.getBoundingClientRect();
-                    const globeCenter = stageTop + bounds.top - pin.getBoundingClientRect().top + bounds.height / 2;
-                    // The About anchor reveals the intact globe before the pin takes over.
-                    const anchorScroll = about.getBoundingClientRect().top + window.scrollY - headerHeight;
-                    return Math.min(stageTop - headerHeight + 12, Math.max(anchorScroll + innerHeight * .025, globeCenter - innerHeight * .4));
-                  },
-                  end: () => `+=${innerHeight * (innerWidth <= 850 ? 1.5 : 1.75)}`,
-                },
-              });
-              ScrollTrigger.create({
-                start: 0,
-                end: () => Math.max(1, document.documentElement.scrollHeight - innerHeight),
-                onUpdate: (trigger) => journey.update(trigger.scroll()),
-                onRefreshInit: measure,
-                onRefresh: (trigger) => {
-                  journey.measure();
-                  journey.update(trigger.scroll());
-                },
-              });
-            }
-            gsap.fromTo('[data-scroll-line]', { scaleY: .55 }, {
-              scaleY: 1, repeat: 2, yoyo: true, duration: .85, ease: 'sine.inOut',
-            });
-            ScrollTrigger.batch(root.querySelectorAll<HTMLElement>('[data-reveal]'), {
-              start: 'top 92%',
-              once: true,
-              onEnter: (items) => {
-                scope.add(() => {
-                  gsap.fromTo(items, { y: 20 }, {
-                    y: 0, duration: .7, stagger: .085, ease: 'power3.out', clearProps: 'transform',
-                  });
-                });
-              },
-            });
-            root.querySelectorAll('[data-feature-grid]').forEach((grid) => {
-              ScrollTrigger.batch(grid.querySelectorAll('[data-feature-card]'), {
-                start: 'top 94%',
-                once: true,
-                batchMax: 3,
-                onEnter: (cards) => {
-                  scope.add(() => {
-                    gsap.fromTo(cards, { y: 25, '--card-edge': .1 }, {
-                      y: 0, '--card-edge': .7, duration: .68, stagger: .11, ease: 'power3.out', clearProps: 'transform',
-                    });
-                    const icons = cards.flatMap((card) => Array.from(card.querySelectorAll('[data-feature-icon]')));
-                    gsap.fromTo(icons, { scale: .86, y: 4 }, {
-                      scale: 1, y: 0, duration: .53, delay: .08, stagger: .11, ease: 'power2.out', clearProps: 'transform',
-                    });
-                  });
-                },
-              });
-            });
-            root.querySelectorAll<HTMLElement>('[data-project-image]').forEach((item) => {
-              gsap.from(item.children, {
-                y: 14, duration: .65, stagger: .09, ease: 'power3.out', clearProps: 'transform',
-                scrollTrigger: { trigger: item, start: 'top 93%', once: true },
-              });
-            });
-            gsap.fromTo('[data-progress]', { scaleY: 0 }, {
-              scaleY: 1,
-              ease: 'none',
-              scrollTrigger: { trigger: '[data-timeline]', start: 'top 80%', end: 'bottom 67%', scrub: true },
-            });
-            ScrollTrigger.batch(root.querySelectorAll('[data-experience-card]'), {
-              start: 'top 90%',
-              once: true,
-              onEnter: (cards) => {
-                scope.add(() => {
-                  gsap.fromTo(cards.map((item) => item.firstElementChild), { y: 24, opacity: .63 }, {
-                    y: 0, opacity: 1, duration: .72, stagger: .14, ease: 'power3.out', clearProps: 'transform,opacity',
-                  });
-                });
-              },
-            });
-            const headings = Array.from(root.querySelectorAll<HTMLElement>('[data-heading-reveal]'));
-            const contactTitle = document.getElementById('contact-title');
-            if (contactTitle) headings.push(contactTitle);
-            for (const heading of headings) {
-              const lines = heading.querySelectorAll('[data-contact-line]');
-              gsap.fromTo(lines.length ? lines : heading, { y: 60, opacity: 0 }, {
-                y: 0, opacity: 1, duration: .95, stagger: .12, ease: 'power3.out',
-                immediateRender: true,
-                scrollTrigger: {
-                  trigger: heading, start: 'top bottom', end: 'bottom top',
-                  toggleActions: 'play complete play reverse',
-                },
-              });
-            }
-          }, root);
-          ScrollTrigger.refresh();
-          ScrollTrigger.update();
-          let refreshFrame = 0;
-          const geometry = new ResizeObserver(() => {
-            cancelAnimationFrame(refreshFrame);
-            refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
-          });
-          geometry.observe(root);
-          if (journey) geometry.observe(hero);
-          if (journey) geometry.observe(pin);
-          if (header) geometry.observe(header);
+      async function prepare() {
+        if (requested || signal.aborted) return;
+        requested = true;
+        try {
+          const { mountHomeParticles } = await import('@/lib/homeParticles');
+          if (signal.aborted) return;
+          journey = await mountHomeParticles(root!, canvas!, signal, unavailable);
+          if (signal.aborted) return;
+          if (!journey) { unavailable(); return; }
+          measuring = true;
+          schedule();
+        } catch {
+          if (!signal.aborted) unavailable();
+        }
+      }
 
-          dispose = () => {
-            cancelAnimationFrame(refreshFrame);
-            geometry.disconnect();
-            portrait.abort();
-            context.revert();
-            sequence.removeAttribute('data-pinned');
-            sequence.removeAttribute('data-unpinned');
-            sequence.style.removeProperty('--pin-top');
-          };
-        }).catch(() => {
-          if (current === generation) {
-            dispose?.();
-            sequence.setAttribute('data-unpinned', '');
+      function update() {
+        frame = 0;
+        const scroll = scrollY;
+        const height = innerHeight;
+        if (measuring) {
+          measuring = false;
+          const headerHeight = header?.offsetHeight ?? 0;
+          const heroPinned = desktop.matches && hero!.offsetHeight + headerHeight <= height + 2;
+          if (journey || !heroPinned) sequence!.toggleAttribute('data-unpinned', !heroPinned || !journey && requested);
+          sequence!.style.setProperty('--pin-top', `${headerHeight}px`);
+          if (journey) {
+            const stageTop = stage!.getBoundingClientRect().top + scroll;
+            const globeBox = globe!.getBoundingClientRect();
+            const globeCenter = stageTop + globeBox.top - pin!.getBoundingClientRect().top + globeBox.height / 2;
+            const anchor = about!.getBoundingClientRect().top + scroll - headerHeight;
+            start = Math.min(stageTop - headerHeight + 12, Math.max(anchor + height * .025, globeCenter - height * .4));
+            distance = height * (innerWidth <= 850 ? 1.5 : 1.75);
+            stage!.style.setProperty('--globe-top', `${stageTop - start}px`);
+            stage!.style.setProperty('--globe-distance', `${distance}px`);
+            stage!.setAttribute('data-motion-pinned', '');
+            journey.measure();
           }
-        });
-    };
+          if (timeline) {
+            const bounds = timeline.getBoundingClientRect();
+            timelineStart = bounds.top + scroll - height * .8;
+            timelineLength = Math.max(1, bounds.height + height * .13);
+          }
+        }
+        if (scroll > 0 && !requested) void prepare();
+        journey?.update(scroll, Math.min(1, Math.max(0, (scroll - start) / distance)));
+        const progress = Math.min(1, Math.max(0, (scroll - timelineStart) / timelineLength));
+        if (line && previousProgress !== progress) {
+          previousProgress = progress;
+          line.style.transform = `scaleY(${progress})`;
+        }
+      }
+
+      function schedule() {
+        if (!frame) frame = requestAnimationFrame(update);
+      }
+      const geometry = new ResizeObserver(() => {
+        measuring = true;
+        schedule();
+      });
+      geometry.observe(root!);
+      geometry.observe(pin!);
+      if (header) geometry.observe(header);
+      window.addEventListener('scroll', schedule, { passive: true, signal });
+      window.addEventListener('resize', () => { measuring = true; schedule(); }, { passive: true, signal });
+      schedule();
+      // Warm a small module between frames. Uploads and shader compilation begin at the first scroll.
+      const warmup = 'requestIdleCallback' in window
+        ? window.requestIdleCallback(() => { void import('@/lib/homeParticles').catch(() => {}); }) : undefined;
+
+      cleanup = () => {
+        events.abort();
+        stopReveals();
+        geometry.disconnect();
+        cancelAnimationFrame(frame);
+        if (warmup !== undefined) window.cancelIdleCallback(warmup);
+        removePin();
+        sequence!.removeAttribute('data-unpinned');
+        sequence!.style.removeProperty('--pin-top');
+        line?.style.removeProperty('transform');
+      };
+    }
 
     configure();
     preference.addEventListener('change', configure);
-    return () => {
-      generation++;
-      preference.removeEventListener('change', configure);
-      dispose?.();
-    };
+    return () => { preference.removeEventListener('change', configure); cleanup?.(); };
   }, []);
 
   return <canvas className="homeParticles" data-home-particles aria-hidden="true" />;

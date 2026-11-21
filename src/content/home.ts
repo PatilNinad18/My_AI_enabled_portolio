@@ -9,32 +9,32 @@ export type Feature = {
 export const expertise: readonly Feature[] = [
   {
     title: 'Full-Stack Development',
-    description: 'Building complete web applications using React, Next.js, Node.js, Express, and modern frontend/backend architectures.',
+    description: 'Building end-to-end applications with React, Next.js, Node.js, and modern frontend and backend technologies.',
     icon: 'layers',
   },
   {
     title: 'Backend Engineering',
-    description: 'Designing REST APIs, implementing authentication, integrating databases, and building reliable application workflows with Node.js and Python.',
+    description: 'Developing REST APIs, application logic, database integrations, and backend services using Python, FastAPI, and Node.js.',
     icon: 'server',
   },
   {
     title: 'AI & LLM Applications',
-    description: 'Developing AI-enabled applications using LLM integrations, retrieval-augmented generation, embeddings, and vector search.',
+    description: 'Building LLM-powered applications using RAG, vector search, embeddings, prompt engineering, and AI agent workflows.',
     icon: 'sparkles',
   },
   {
     title: 'Machine Learning & Computer Vision',
-    description: 'Working with Python, PyTorch, scikit-learn, YOLOv8, and OpenCV to build practical detection and analytical systems.',
+    description: 'Exploring machine learning and computer vision through Python, PyTorch, TensorFlow, OpenCV, and YOLOv8.',
     icon: 'vision',
   },
   {
     title: 'Databases & Real-Time Systems',
-    description: 'Using MongoDB, SQLite, Qdrant, and event-driven or real-time integrations to manage and process application data.',
+    description: 'Working with PostgreSQL, MongoDB, SQLite, and Qdrant to design data storage, retrieval, and application workflows.',
     icon: 'database',
   },
   {
     title: 'Development Tools & Deployment',
-    description: 'Working with Git, GitHub, Docker fundamentals, testing tools, and application deployment workflows.',
+    description: 'Using Git, GitHub, Docker, testing tools, and deployment platforms to develop and maintain software applications.',
     icon: 'terminal',
   },
 ];

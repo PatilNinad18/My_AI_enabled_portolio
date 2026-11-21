@@ -397,6 +397,16 @@
       ]
     },
     {
+      "id": "frontend",
+      "from": ["Person", "Ninad Patil"],
+      "relation": "DEMONSTRATES_SKILL",
+      "to": ["Skill", "Frontend engineering"],
+      "topics": ["frontend", "tools"],
+      "text": "Ninad lists React, Next.js, JavaScript, TypeScript, Tailwind CSS, responsive web design, GSAP, Three.js, and React Three Fiber in the frontend section of his Personal Knowledge Profile.",
+      "refs": [["personal", "Responsive Web Design"]],
+      "aliases": ["frontend development", "responsive UI", "interactive interfaces"]
+    },
+    {
       "id": "databases",
       "from": [
         "Person",
@@ -829,7 +839,7 @@
         "Engineering growth"
       ],
       "topics": [
-        "delivery",
+        "growth",
         "coding",
         "architecture"
       ],

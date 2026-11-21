@@ -1,18 +1,46 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/assistant.module.scss';
 
 const scene = 'https://my.spline.design/genkubgreetingrobot-43G3CMxy8nKLssEhsHTMdTs6/';
 
 export default function RobotScene() {
   const [status, setStatus] = useState<'initial' | 'loading' | 'slow' | 'ready' | 'error'>('initial');
+  const surface = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Attach load handlers before starting the iframe request, including on cached reloads.
-    const frame = requestAnimationFrame(() => setStatus('loading'));
-    const timer = window.setTimeout(() => setStatus((current) => current === 'loading' ? 'slow' : current), 12_000);
-    return () => { cancelAnimationFrame(frame); window.clearTimeout(timer); };
+    const stage = surface.current;
+    if (!stage) return;
+    let idle: number | undefined;
+    let frame = 0;
+    let timer = 0;
+    const loadScene = () => {
+      setStatus('loading');
+      timer = window.setTimeout(() => setStatus((current) => current === 'loading' ? 'slow' : current), 12_000);
+    };
+    const visibility = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || document.hidden) return;
+      visibility.disconnect();
+      // Let the visible heading and composer paint before attaching the third-party scene.
+      if ('requestIdleCallback' in window) idle = window.requestIdleCallback(loadScene, { timeout: 700 });
+      else frame = requestAnimationFrame(loadScene);
+    });
+    visibility.observe(stage);
+    const resume = () => {
+      if (!document.hidden && idle === undefined && !frame && !timer) {
+        visibility.unobserve(stage);
+        visibility.observe(stage);
+      }
+    };
+    document.addEventListener('visibilitychange', resume);
+    return () => {
+      visibility.disconnect();
+      document.removeEventListener('visibilitychange', resume);
+      if (idle !== undefined) window.cancelIdleCallback(idle);
+      cancelAnimationFrame(frame);
+      clearTimeout(timer);
+    };
   }, []);
 
   const loadingMessage = status === 'error'
@@ -20,9 +48,9 @@ export default function RobotScene() {
     : status === 'slow' ? 'The robot is taking longer to load. You can open the scene directly.' : 'Loading the robot…';
 
   return (
-    <div className={styles.scene}>
+    <div className={styles.scene} ref={surface}>
       <div className={styles.sceneLight} aria-hidden="true" />
-      {status !== 'initial' && <iframe title="Interactive Spline greeting robot" src={scene}
+      {status !== 'initial' && <iframe title="Interactive Spline greeting robot" src={scene} loading="lazy"
         referrerPolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-pointer-lock"
         data-loaded={status === 'ready' || undefined} onLoad={() => setStatus('ready')} onError={() => setStatus('error')} />}
       <div className={styles.sceneTools}>

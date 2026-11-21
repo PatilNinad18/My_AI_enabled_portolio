@@ -7,16 +7,16 @@ export const chapters = [
       <>
         <p>I started exploring software development during my engineering journey, driven by curiosity about how technology works and how software can solve real-world problems.</p>
         <p>What began with learning programming and building small applications gradually turned into something much bigger.</p>
-        <p>Over the years, I've explored different areas of technology, from full-stack software development and frontend engineering to artificial intelligence, machine learning, and building independent products.</p>
-        <p>I've worked on AI-powered applications, developed web platforms, experimented with computer vision, and built tools designed around real user problems.</p>
-        <p>One of my most meaningful projects is <strong>TimeBoard</strong>, a desktop productivity and time-tracking application that I've independently built and developed. It focuses on helping people understand their work habits, track deep-work sessions, and improve productivity. The application has reached 50+ active users.</p>
-        <p>I've also been working on <strong>Fieldora</strong>, an intelligent browser extension designed to simplify repetitive form filling through local profile-based autofill. The project has challenged me to work with browser APIs, dynamic web applications, React-controlled inputs, and real-world compatibility issues.</p>
-        <p>On the AI side, I've worked on Retrieval-Augmented Generation (RAG) systems, AI agents, agricultural assistance platforms, and AI-powered candidate screening solutions. These experiences have helped me understand how to move beyond experimenting with models and build complete applications around them.</p>
-        <p>Currently, I'm working as a Software Engineer Intern at SmartLeaven Technologies, where I'm contributing to AI-driven products and exploring the intersection of software engineering and applied AI.</p>
+        <p>Over the years, I&apos;ve explored different areas of technology, from full-stack software development and frontend engineering to artificial intelligence, machine learning, and building independent products.</p>
+        <p>I&apos;ve worked on AI-powered applications, developed web platforms, experimented with computer vision, and built tools designed around real user problems.</p>
+        <p>One of my most meaningful projects is <strong>TimeBoard</strong>, a desktop productivity and time-tracking application that I&apos;ve independently built and developed. It focuses on helping people understand their work habits, track deep-work sessions, and improve productivity. The application has reached 50+ active users.</p>
+        <p>I&apos;ve also been working on <strong>Fieldora</strong>, an intelligent browser extension designed to simplify repetitive form filling through local profile-based autofill. The project has challenged me to work with browser APIs, dynamic web applications, React-controlled inputs, and real-world compatibility issues.</p>
+        <p>On the AI side, I&apos;ve worked on Retrieval-Augmented Generation (RAG) systems, AI agents, agricultural assistance platforms, and AI-powered candidate screening solutions. These experiences have helped me understand how to move beyond experimenting with models and build complete applications around them.</p>
+        <p>Currently, I&apos;m working as a Software Engineer Intern at SmartLeaven Technologies, where I&apos;m contributing to AI-driven products and exploring the intersection of software engineering and applied AI.</p>
         <p>What interests me most is the entire process of building technology: identifying a problem, understanding the user, designing a solution, engineering the product, and continuously improving it based on feedback.</p>
-        <p>I'm particularly interested in Artificial Intelligence, Machine Learning, Software Engineering, Product Development, Developer Tools, and building useful technology products.</p>
-        <p>I believe good engineers shouldn't just understand how to write code. They should understand why they're building something, who they're building it for, and whether it actually solves the intended problem.</p>
-        <p>Today, I'm continuing to strengthen my engineering foundations, build independent products, and explore opportunities to work with ambitious teams solving meaningful problems through technology.</p>
+        <p>I&apos;m particularly interested in Artificial Intelligence, Machine Learning, Software Engineering, Product Development, Developer Tools, and building useful technology products.</p>
+        <p>I believe good engineers shouldn&apos;t just understand how to write code. They should understand why they&apos;re building something, who they&apos;re building it for, and whether it actually solves the intended problem.</p>
+        <p>Today, I&apos;m continuing to strengthen my engineering foundations, build independent products, and explore opportunities to work with ambitious teams solving meaningful problems through technology.</p>
       </>
     ),
   },
@@ -32,7 +32,7 @@ export const chapters = [
         <p data-entry-focus>AI, backend engineering, and product development.</p>
         <p>Working on AI-driven products that combine software engineering, LLMs, and practical business applications.</p>
         <p>My work has involved developing RAG-based systems, experimenting with AI agents, building backend services, integrating language models, and contributing to AI-powered recruitment and agricultural technology solutions.</p>
-        <p>Some areas I've worked with include:</p>
+        <p>Some areas I&apos;ve worked with include:</p>
         <ul>
           <li>Python, FastAPI, and backend development.</li>
           <li>LLM integration and local model deployment.</li>
@@ -49,7 +49,7 @@ export const chapters = [
         <p>Worked on building interactive web experiences, combining frontend engineering, 3D visualization, and AI-powered features.</p>
         <p>One of the projects involved developing an interactive 3D Earth website using React Three Fiber, focusing on immersive visual experiences and interactive elements.</p>
         <p>This experience helped me explore creative frontend development, 3D web technologies, and the integration of modern web tools into engaging digital products.</p>
-        <p>Across both experiences, I've developed an interest in building software that combines strong engineering foundations with emerging technologies.</p>
+        <p>Across both experiences, I&apos;ve developed an interest in building software that combines strong engineering foundations with emerging technologies.</p>
       </>
     ),
   },
@@ -60,7 +60,7 @@ export const chapters = [
     content: (
       <>
         <p>I enjoy building products outside traditional academic and internship work.</p>
-        <p>Rather than limiting myself to tutorials and isolated coding exercises, I've consistently tried to identify problems and develop complete solutions.</p>
+        <p>Rather than limiting myself to tutorials and isolated coding exercises, I&apos;ve consistently tried to identify problems and develop complete solutions.</p>
         <h3>TimeBoard — Productivity &amp; Time Tracking</h3>
         <p>An independently developed desktop application designed to help users understand how they spend their time.</p>
         <p>Built using Electron, React, Node.js, and SQLite, with features including:</p>

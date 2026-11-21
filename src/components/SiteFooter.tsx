@@ -13,9 +13,9 @@ export default function SiteFooter() {
   if (pathname !== '/') {
     return (
       <footer className="footer">
-        <Link href="/">Ninad Patil</Link>
+        <Link href="/" prefetch={false}>Ninad Patil</Link>
         <span>Full-Stack &amp; AI Engineer</span>
-        <Link href="/#contact">Contact</Link>
+        <Link href="/#contact" prefetch={false}>Contact</Link>
       </footer>
     );
   }
@@ -30,10 +30,10 @@ export default function SiteFooter() {
         <a className={styles.cta} href={linkedIn} target="_blank" rel="noopener noreferrer">
           Let’s connect <span aria-hidden="true">↗</span>
         </a>
-        <p className={styles.copy}>Whether it's full-stack development, AI engineering, interesting projects, or new opportunities, I'd love to connect.</p>
+        <p className={styles.copy}>Whether it&apos;s full-stack development, AI engineering, interesting projects, or new opportunities, I&apos;d love to connect.</p>
       </div>
       <div className={styles.details}>
-        <Link href="/" className={styles.wordmark}>Ninad Patil<span>.</span></Link>
+        <Link href="/" prefetch={false} className={styles.wordmark}>Ninad Patil<span>.</span></Link>
         <ul className={styles.links} aria-label="Contact links">
           <li><a href={linkedIn} target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></li>
           <li><a href={github} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></li>

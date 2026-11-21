@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: 'Ninad AI' };
 export default function AssistantPage() {
   return (
     <div className={styles.stage} data-assistant-page>
-      <Link href="/" className={styles.back}>
+      <Link href="/" prefetch={false} className={styles.back}>
         <span aria-hidden="true">←</span> Back to the portfolio
       </Link>
       <NinadChat />

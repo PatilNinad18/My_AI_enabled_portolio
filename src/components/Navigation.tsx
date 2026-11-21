@@ -22,7 +22,7 @@ function RouteLinks({ activeHref, navigate, closeMenu }: {
   return (
     <>
       {links.map(([section, label]) => (
-        <Link key={section} href={`/#${section}`} scroll={false}
+        <Link key={section} href={`/#${section}`} scroll={false} prefetch={false}
           aria-current={activeHref === `/#${section}` ? 'location' : undefined}
           onNavigate={(event) => navigate(section, event)}>
           <span data-lift>{label}</span>
@@ -38,7 +38,7 @@ function RouteLinks({ activeHref, navigate, closeMenu }: {
 
 function ContactLink({ navigate }: { navigate: Navigate }) {
   return (
-    <Link href="/#contact" scroll={false} className={styles.contact} onNavigate={(event) => navigate('contact', event)}>
+    <Link href="/#contact" scroll={false} prefetch={false} className={styles.contact} onNavigate={(event) => navigate('contact', event)}>
       <span data-lift>Let’s Connect <span aria-hidden="true">↗</span></span>
     </Link>
   );
@@ -171,120 +171,69 @@ export default function Navigation() {
     const shell = header.current;
     const menuToggle = toggle.current;
     if (!item || !shell || !menuToggle) return;
-    let disposed = false;
-    let cleanup: (() => void) | undefined;
-    void import('gsap').then(({ gsap }) => {
-      if (disposed) return;
-      const media = gsap.matchMedia();
-      media.add('(prefers-reduced-motion: no-preference)', (scope) => {
-        gsap.fromTo(item, { y: -7 }, { y: 0, duration: .56, ease: 'power2.out', clearProps: 'transform' });
-        let scrolled = window.scrollY > 30;
-        gsap.set(item, { '--glass-opacity': scrolled ? .91 : .78 });
-        const events = new AbortController();
-        const hover = window.matchMedia('(hover: hover)');
-        let lastY = Math.max(0, window.scrollY);
-        let visible = true;
-        const setVisibility = (show: boolean, immediate = false) => {
-          if (visible === show && !immediate) return;
-          visible = show;
-          shell.toggleAttribute('data-nav-hidden', !show);
-          gsap.to(shell, {
-            yPercent: show ? 0 : -120,
-            opacity: show ? 1 : 0,
-            duration: immediate ? 0 : show ? .45 : .4,
-            ease: show ? 'power3.out' : 'power2.inOut',
-            overwrite: true,
-          });
-        };
-        const reveal = () => {
-          lastY = Math.max(0, window.scrollY);
-          setVisibility(true);
-        };
-        revealNavbar.current = reveal;
-        const onScroll = () => {
-          const next = window.scrollY > 30;
-          if (next !== scrolled) {
-            scrolled = next;
-            gsap.to(item, { '--glass-opacity': next ? .91 : .78, duration: .28, overwrite: 'auto' });
-          }
+    const events = new AbortController();
+    const motion = matchMedia('(prefers-reduced-motion: no-preference)');
+    const hover = matchMedia('(hover: hover)');
+    let lastY = Math.max(0, scrollY);
+    let frame = 0;
 
-          const y = Math.max(0, window.scrollY);
-          const focused = document.activeElement;
-          const keyboardFocus = shell.contains(focused) && focused?.matches(':focus-visible');
-          if (y <= nearTop || stopAnchorMotion.current || performance.now() < anchorUntil.current || keyboardFocus ||
-            menuToggle.getAttribute('aria-expanded') === 'true' || (hover.matches && item.matches(':hover'))) {
-            reveal();
-            return;
-          }
-          const movement = y - lastY;
-          if (Math.abs(movement) < scrollThreshold) return;
-          lastY = y;
-          setVisibility(movement < 0);
-        };
-        window.addEventListener('scroll', onScroll, { passive: true, signal: events.signal });
-        shell.addEventListener('focusin', (event) => {
-          if (event.target instanceof Element && event.target.matches(':focus-visible')) setVisibility(true, true);
-        }, { signal: events.signal });
-
-        for (const link of item.querySelectorAll<HTMLElement>('a')) {
-          const label = link.querySelector('[data-lift]');
-          if (!label) continue;
-          link.addEventListener('pointerenter', (event) => {
-            if (event.pointerType === 'mouse') scope.add(() => {
-              gsap.to(label, { y: -2, duration: .2, overwrite: 'auto' });
-            });
-          }, { signal: events.signal });
-          link.addEventListener('pointerleave', () => {
-            scope.add(() => {
-              gsap.to(label, { y: 0, duration: .2, overwrite: 'auto' });
-            });
-          }, { signal: events.signal });
-        }
-
-        return () => {
-          events.abort();
-          revealNavbar.current = null;
-          gsap.killTweensOf(shell);
-          gsap.killTweensOf(item, '--glass-opacity');
-          gsap.set(shell, { clearProps: 'transform,opacity' });
-          shell.removeAttribute('data-nav-hidden');
-        };
-      });
-      cleanup = () => media.revert();
-    }).catch(() => {});
-    return () => { disposed = true; cleanup?.(); };
+    const reveal = () => {
+      lastY = Math.max(0, scrollY);
+      shell.removeAttribute('data-nav-hidden');
+    };
+    revealNavbar.current = reveal;
+    function update() {
+      frame = 0;
+      const y = Math.max(0, scrollY);
+      shell!.toggleAttribute('data-nav-scrolled', y > 30);
+      const focused = document.activeElement;
+      const keyboardFocus = shell!.contains(focused) && focused?.matches(':focus-visible');
+      if (!motion.matches || y <= nearTop || stopAnchorMotion.current || performance.now() < anchorUntil.current
+        || keyboardFocus || menuToggle!.getAttribute('aria-expanded') === 'true' || (hover.matches && item!.matches(':hover'))) {
+        reveal();
+        return;
+      }
+      if (Math.abs(y - lastY) < scrollThreshold) return;
+      shell!.toggleAttribute('data-nav-hidden', y > lastY);
+      lastY = y;
+    }
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(update);
+    }
+    window.addEventListener('scroll', schedule, { passive: true, signal: events.signal });
+    motion.addEventListener('change', schedule, { signal: events.signal });
+    shell.addEventListener('focusin', (event) => {
+      if (event.target instanceof Element && event.target.matches(':focus-visible')) reveal();
+    }, { signal: events.signal });
+    schedule();
+    return () => {
+      events.abort();
+      cancelAnimationFrame(frame);
+      revealNavbar.current = null;
+      shell.removeAttribute('data-nav-hidden');
+      shell.removeAttribute('data-nav-scrolled');
+    };
   }, []);
 
   useEffect(() => {
     const menu = linksRegion.current;
     const marker = slider.current;
-    if (!menu || !marker) return;
-    let disposed = false;
-    let cleanup: (() => void) | undefined;
-    void import('gsap').then(({ gsap }) => {
-      if (disposed) return;
-      const active = menu.querySelector<HTMLElement>('[aria-current]');
-      if (!active) {
-        menu.removeAttribute('data-marker-ready');
-        return;
-      }
-      const position = () => ({ x: active.offsetLeft, width: active.offsetWidth });
-      const animate = menu.hasAttribute('data-marker-ready')
-        && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-      if (animate) gsap.to(marker, { ...position(), duration: .3, ease: 'power2.out', overwrite: true });
-      else gsap.set(marker, position());
+    const active = menu?.querySelector<HTMLElement>('[aria-current]');
+    if (!menu || !marker || !active) {
+      menu?.removeAttribute('data-marker-ready');
+      return;
+    }
+    const position = () => {
+      const x = active.offsetLeft;
+      const width = active.offsetWidth;
+      marker.style.transform = `translateX(${x}px)`;
+      marker.style.width = `${width}px`;
       menu.setAttribute('data-marker-ready', '');
-      let width = menu.offsetWidth;
-      const geometry = new ResizeObserver(() => {
-        if (width === menu.offsetWidth) return;
-        width = menu.offsetWidth;
-        gsap.killTweensOf(marker);
-        gsap.set(marker, position());
-      });
-      geometry.observe(menu);
-      cleanup = () => { geometry.disconnect(); gsap.killTweensOf(marker); };
-    }).catch(() => {});
-    return () => { disposed = true; cleanup?.(); };
+    };
+    position();
+    const geometry = new ResizeObserver(position);
+    geometry.observe(menu);
+    return () => geometry.disconnect();
   }, [activeHref]);
 
   useEffect(() => {
@@ -308,7 +257,7 @@ export default function Navigation() {
   return (
     <header className={styles.header} data-site-header ref={header}>
       <div className={styles.bar} ref={bar}>
-        <Link className={styles.wordmark} href="/#home" scroll={false} aria-label="Ninad Patil home"
+        <Link className={styles.wordmark} href="/#home" scroll={false} prefetch={false} aria-label="Ninad Patil home"
           onNavigate={(event) => navigate('home', event)}>
           Ninad Patil<span>.</span>
         </Link>

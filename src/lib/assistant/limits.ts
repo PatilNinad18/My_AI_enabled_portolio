@@ -1,3 +1,5 @@
+import { createHmac } from 'node:crypto';
+import { isIP } from 'node:net';
 import { historyLimit, questionLimit, type ConversationTurn } from './protocol';
 
 export class InvalidRequest extends Error {
@@ -5,27 +7,40 @@ export class InvalidRequest extends Error {
 }
 
 const maxBytes = 24_576;
-const windowMs = 60_000;
-const clients = new Map<string, number>();
-let reset = 0;
-let total = 0;
-let concurrent = 0;
+export const visitorWindow = [{ limit: 15, ms: 60 * 60_000 }];
 
-export function reserve(request: Request) {
-  const now = Date.now();
-  if (now >= reset) {
-    reset = now + windowMs;
-    total = 0;
-    clients.clear();
+export function isLocalRequest(request: Request) {
+  try {
+    const hostname = new URL(`http://${request.headers.get('host') ?? new URL(request.url).host}`).hostname;
+    return ['localhost', '127.0.0.1', '[::1]'].includes(hostname);
+  } catch {
+    return false;
   }
-  const header = process.env.NINAD_AI_CLIENT_IP_HEADER;
-  const client = (header ? request.headers.get(header)?.split(',')[0].trim().slice(0, 64) : undefined) || 'shared';
-  const used = clients.get(client) ?? 0;
-  if (concurrent >= 3 || total >= 40 || used >= 12) return undefined;
-  clients.set(client, used + 1);
-  total++;
-  concurrent++;
-  return () => { concurrent--; };
+}
+
+function networkAddress(address: string) {
+  const version = isIP(address);
+  if (version === 4) return address;
+  if (version !== 6 || address.includes('%')) return;
+  const canonical = new URL(`http://[${address}]`).hostname.slice(1, -1);
+  const mapped = /^::ffff:([0-9a-f]+):([0-9a-f]+)$/.exec(canonical);
+  if (mapped) {
+    const [high, low] = mapped.slice(1).map((part) => Number.parseInt(part, 16));
+    return [high >> 8, high & 255, low >> 8, low & 255].join('.');
+  }
+  const [left, right] = canonical.split('::');
+  const start = left.split(':').filter(Boolean);
+  const end = right?.split(':').filter(Boolean) ?? [];
+  if (right !== undefined) start.push(...Array<string>(8 - start.length - end.length).fill('0'), ...end);
+  return `${start.slice(0, 4).join(':')}::/64`;
+}
+
+export function visitorId(request: Request, loopback: boolean) {
+  const header = process.env.NINAD_AI_CLIENT_IP_HEADER?.trim();
+  const address = header ? networkAddress(request.headers.get(header)?.trim() ?? '') : loopback ? 'localhost' : undefined;
+  const secret = process.env.NINAD_AI_VISITOR_SECRET?.trim() || (loopback ? 'ninad-ai-local' : undefined);
+  if (!address || !secret) throw new Error('A trusted visitor identity is required');
+  return createHmac('sha256', secret).update(address).digest('hex');
 }
 
 function clean(value: unknown): string {

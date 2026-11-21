@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, type PointerEvent } from 'react';
+import { useId, useRef, useState, type PointerEvent } from 'react';
 import ProjectFacts from '@/components/ProjectFacts';
 import ProjectFilters from '@/components/ProjectFilters';
 import ProjectScreenshot, { useProjectScreenshots } from '@/components/ProjectScreenshot';
@@ -22,10 +22,11 @@ function tilt(event: PointerEvent<HTMLElement>) {
 export default function ProjectGrid() {
   const [selected, setSelected] = useState<Category>('Full-Stack');
   const resultsId = useId();
-  const screenshots = useProjectScreenshots();
+  const region = useRef<HTMLDivElement>(null);
+  const screenshots = useProjectScreenshots(region);
 
   return (
-    <div className={styles.work}>
+    <div className={styles.work} ref={region}>
       <ProjectFilters selected={selected} onSelect={setSelected} resultsId={resultsId} />
       <div id={resultsId} key={selected} className={styles.results}>
         <section className={styles.category}>
@@ -36,7 +37,8 @@ export default function ProjectGrid() {
                 <article className={styles.card} onPointerMove={tilt}>
                   <div className={styles.preview} data-project-image>
                     <span className={styles.index} aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-                    <ProjectScreenshot project={project} available={screenshots.has(project.screenshot)} placeholderClass={styles.placeholder} />
+                    <ProjectScreenshot project={project} available={screenshots.has(project.screenshot)} placeholderClass={styles.placeholder}
+                      sizes="(max-width: 780px) 90vw, (max-width: 1300px) 45vw, 575px" />
                   </div>
                   <div className={styles.copy}>
                     <p className={styles.label}>{selected}</p>
