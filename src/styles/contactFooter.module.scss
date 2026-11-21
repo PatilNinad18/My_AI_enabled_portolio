@@ -1,0 +1,56 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(100svh - var(--header-height));
+  padding-inline: var(--content-gutter);
+  scroll-margin-top: var(--header-height);
+  border-top: 1px solid #a85a3a;
+  background: radial-gradient(ellipse at 37% 28%, #21130e 0%, #100c0a 36%, #080808 74%);
+}
+
+.invitation { flex: 1; padding-block: clamp(2.65rem, 5.4vw, 6rem) clamp(3.4rem, 9vw, 9.5rem); }
+.title { font: 400 clamp(2.8rem, 8.45vw, 9.5rem)/.98 var(--serif); letter-spacing: -.075em; }
+.title > span { display: block; }
+.title em { color: #f1dccf; font-weight: 400; }
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1.3rem, 4vw, 4.5rem);
+  min-height: 44px;
+  margin-top: clamp(1.65rem, 4vw, 4.2rem);
+  padding: .2rem 0 .65rem;
+  border-bottom: 1px solid #94786b;
+  font-size: clamp(1.15rem, 2.15vw, 2rem);
+  letter-spacing: -.035em;
+}
+.cta span, .links span { color: var(--accent); }
+.cta:hover, .links a:hover, .wordmark:hover { color: var(--accent); }
+.copy { max-width: 51ch; margin-top: clamp(1rem, 2.3vw, 2rem); color: var(--muted); }
+
+.details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: .8rem clamp(1rem, 4vw, 4rem);
+  padding-block: clamp(1.15rem, 2.7vw, 2.6rem);
+  border-block: 1px solid var(--line);
+}
+.wordmark { justify-self: start; font: 400 clamp(1.5rem, 2.5vw, 2.15rem)/1.15 var(--serif); letter-spacing: -.06em; }
+.wordmark span { color: var(--accent); }
+.links { display: flex; flex-wrap: wrap; gap: 0 clamp(.9rem, 2.4vw, 2.4rem); padding: 0; margin: 0; list-style: none; }
+.links a { display: inline-flex; align-items: center; min-height: 44px; gap: .35rem; color: var(--muted); white-space: nowrap; }
+.top { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid #6e6057; border-radius: 50%; font-size: 1.31rem; }
+.top:hover { color: var(--accent); border-color: var(--accent); background: #ff875514; }
+.cta, .links a, .wordmark, .top { transition: color .22s, border-color .22s, background-color .22s; }
+.copyright { padding-block: 1rem 1.3rem; color: var(--muted); font: .875rem/1.55 var(--mono); }
+
+@media (max-width: 660px) {
+  .details { grid-template-columns: minmax(0, 1fr) auto; }
+  .links { grid-row: 2; grid-column: 1 / -1; }
+  .top { grid-row: 1; grid-column: 2; }
+}
+@media (max-width: 385px) {
+  .title { font-size: clamp(2.2rem, 11vw, 2.65rem); }
+}

@@ -1,0 +1,62 @@
+.section.section {
+  padding-inline: 0;
+  min-width: 0;
+  background: linear-gradient(#0b0a09, #080808);
+}
+
+.heading { padding-inline: var(--content-gutter); }
+.heading h2 { font-size: clamp(2.6rem, 5.9vw, 6rem); }
+
+.rows { display: grid; gap: .55rem; }
+.row {
+  container-type: inline-size;
+  overflow: clip;
+  outline-offset: -.2rem;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.track { display: flex; width: max-content; }
+.list {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 100cqw;
+  gap: .75rem;
+  margin: 0;
+  padding: .28rem .75rem .28rem 0;
+  list-style: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  min-height: 2.85rem;
+  padding: .55rem .95rem;
+  border: 1px solid #372e29;
+  border-radius: 99px;
+  background: #151311;
+  color: #e3dcd5;
+  font: .88rem/1.25 var(--mono);
+  white-space: nowrap;
+  transition: border-color .2s, color .2s;
+}
+
+.badge svg { width: 1.06rem; height: 1.06rem; color: #bdb4ab; }
+.badge:hover { border-color: #9a5c3e; color: var(--accent); }
+.badge:hover svg { color: var(--accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .track { animation: marquee 39s linear infinite; }
+  .row[data-direction='right'] .track { animation-direction: reverse; animation-duration: 42s; }
+  .row:hover .track, .row:focus-within .track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list[aria-hidden='true'] { display: none; }
+  .row { overflow: visible; mask-image: none; }
+  .track { width: auto; }
+  .list { min-width: 0; flex: 1; flex-wrap: wrap; justify-content: center; padding: .25rem var(--content-gutter); }
+}

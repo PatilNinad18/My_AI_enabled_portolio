@@ -1,0 +1,33 @@
+.stage {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  width: min(calc(100% - 2 * var(--gutter)), 86rem);
+  min-height: 33rem;
+  margin: 0 auto 3rem;
+  border: 1px solid #315140;
+  background: #080f0b;
+  color: #d6f0dd;
+}
+
+.field {
+  min-height: 14rem;
+  background:
+    radial-gradient(ellipse, transparent, #080f0b 73%),
+    radial-gradient(circle, #57d38e 1px, transparent 1.6px) 0 0 / 8px 8px;
+}
+
+.terminal {
+  align-self: center;
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  overflow-wrap: anywhere;
+}
+
+.terminal h1 { font: 500 clamp(2.5rem, 6vw, 6rem)/1 var(--mono); letter-spacing: -.08em; }
+.status, .terminal a { color: #8eecaa; font: .875rem/1.5 var(--mono); }
+.terminal a { text-decoration: underline; text-underline-offset: .22em; width: fit-content; }
+
+@media (max-width: 720px) {
+  .stage { grid-template-columns: 1fr; min-height: auto; }
+}
