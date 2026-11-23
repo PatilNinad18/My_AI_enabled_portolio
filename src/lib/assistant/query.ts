@@ -1,5 +1,6 @@
 import { mentionedProjects, mentionedTechnologies, projectDirectory, type Topic } from './knowledge';
 import { contextLimit, type ConversationTurn } from './protocol';
+import { areaTopic, leadershipLanguage, ownershipLanguage, professionalRequirements, recruiterLanguage, technicalAssessment, technologyRequirements, type Requirement } from './requirements';
 
 export const injection = /\b(?:ignore|disregard|forget|override|bypass)\b.{0,65}\b(?:rules?|instructions?|guardrails?|prompt|policy|previous|above)\b|\b(?:system prompt|developer message|hidden instructions|jailbreak|prompt injection|act as|pretend to be|roleplay|base64)\b|\[\/?INST\]|<\|/i;
 const privateRequest = /\b(?:passwords?|credentials?|api keys?|home (?:address|phone|number)|private (?:email|phone|number|information)|personal (?:email|address)|salary|medical records?|family members?)\b/i;
@@ -10,6 +11,10 @@ const followUp = /\b(?:that (?:project|app|one)|this (?:project|app)|the project
 const detailRequest = /\b(?:in depth|in detail|details|architecture|trade[- ]?offs?|compare|comparison|different|step by step)\b/i;
 const assessment = /\b(?:can|capable|good at|discipline|suitable|qualified|ready for|trust|strengths?|ability|demonstrates?|hire|fit|experience)\b/i;
 const limitations = /\b(?:limitations?|weakness\w*|shortcomings?|improv\w*|ready for production|production[- ]ready|deployment|deployed|shipped)\b/i;
+const availabilityLanguage = /\b(?:join(?:ing)?|start date|notice period|availab\w*|start (?:next|on|in)|how soon (?:can|could))\b/i;
+const currentEmployer = /\b(?:smartleaven|blockseblock)\b/i;
+const continuation = /^(?:and\s+|(?:what|how) about\b)/i;
+const risks = /\b(?:weakness\w*|shortcomings?|areas? (?:of|for) (?:growth|improvement)|growth areas?|improv\w*|still learning)\b/i;
 
 const signals: { topic: Topic; pattern: RegExp }[] = [
   { topic: 'frontend', pattern: /\b(?:front[- ]?end|web interfaces?|user interfaces?|ui|react(?:\.js)?|next\.?js|responsive|css)\b/i },
@@ -20,6 +25,7 @@ const signals: { topic: Topic; pattern: RegExp }[] = [
 
 export type Facet = {
   query: string; topic: Topic; projects: string[]; goal: 'fact' | 'assessment' | 'example' | 'limitations'; focus?: string;
+  requirement?: Requirement;
 };
 export type Plan = { facets: Facet[]; detail: boolean; omitted: boolean; contextual: boolean };
 const ordinals = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
@@ -44,10 +50,10 @@ function classify(query: string, projectIds: string[], priorTopic?: Topic): Face
     { position: query.search(/\bblockseblock\b/i), key: 'block' },
   ].filter(({ position }) => position >= 0).sort((a, b) => a.position - b.position);
   if (employer.length) return employer.map(({ key }) => build('experience', 'fact', key));
-  if (/\b(?:join(?:ing)?|start date|notice period|availab\w*|start (?:next|on|in)|how soon (?:can|could))\b/i.test(query) && aboutPortfolio) {
+  if (availabilityLanguage.test(query) && aboutPortfolio) {
     return [build('availability')];
   }
-  if (/\b(?:weakness\w*|shortcomings?|areas? (?:of|for) (?:growth|improvement)|improv\w*|still learning)\b/i.test(query) && aboutPortfolio) {
+  if (risks.test(query) && aboutPortfolio) {
     return [build('growth', 'limitations', 'growth')];
   }
   if (/\b(?:cgpa|gpa|grade point)\b/i.test(query)) return [build('education', 'fact', 'cgpa')];
@@ -93,6 +99,11 @@ export function planQuery(question: string, history: ConversationTurn[]): Plan |
   if (injection.test(question)) return null;
   const recent = history.slice(-contextLimit).filter(({ question }) => !injection.test(question) && !privateRequest.test(question));
   const last = recent.at(-1);
+  const previousQuestion = last?.question ?? '';
+  const previousTechnology = technologyRequirements(previousQuestion);
+  const professionalContext = subject.test(previousQuestion)
+    && (recruiterLanguage.test(previousQuestion) || assessment.test(previousQuestion) || technicalAssessment.test(previousQuestion)
+      || leadershipLanguage.test(previousQuestion) || ownershipLanguage.test(previousQuestion));
   const lastProjects = mentionedProjects(last?.answer ?? last?.question ?? '');
   const priorTopic = recent.toReversed().flatMap(({ question }) => classify(question, [])
     .map(({ topic }) => topic)).find((topic) => ['frontend', 'backend', 'ai', 'coding', 'architecture'].includes(topic));
@@ -104,26 +115,52 @@ export function planQuery(question: string, history: ConversationTurn[]): Plan |
   let contextual = Boolean(target);
   let omitted = false;
   const facets: Facet[] = [];
-  for (const part of resolved.split(/\?+\s*|;\s*|\s+(?:and|also|but)\s+(?=(?:why|what|who|where|when|how|can|would|did|does|is|tell|solve|write|explain)\b)/i)) {
+  const scopedRecruiterQuestion = subject.test(resolved) && recruiterLanguage.test(resolved);
+  for (const part of resolved.split(/\?+\s*|;\s*|\s+(?:and|also|but)\s+(?=(?:why|what|who|where|when|how|can|could|would|did|does|is|tell|solve|write|explain|private|personal|home address|salary|passwords?)\b)/i)) {
     const query = part.trim();
     if (!/[\p{L}\p{N}]/u.test(query)) continue;
-    const skillList = /^(?:(?:can|could|does|did) (?:ninad(?: patil)?|he) (?:handle|use|work with|build with|know))\s+(.+)$/i.exec(query);
-    if (skillList && /\band\b|,/i.test(skillList[1]) && !mentionedProjects(query, true).length) {
-      for (const skill of skillList[1].split(/\s+and\s+|,\s*/i).map((value) => value.trim()).filter(Boolean)) {
-        if (unrelatedTask.test(skill) || privateRequest.test(skill)) { omitted = true; continue; }
-        facets.push(...classify(`Can Ninad work with ${skill}`, [], priorTopic));
-      }
-      continue;
-    }
     if (privateRequest.test(query) || unrelatedTask.test(query)) { omitted = true; continue; }
     const explicit = mentionedProjects(query, true);
     const previousProjects = facets.at(-1)?.projects;
     const referent = previousProjects?.length === 1 ? previousProjects : lastProjects;
     const spec = !explicit.length && !example.test(query) && followUp.test(query) && referent.length === 1 ? referent : explicit;
+    const continued = continuation.test(query) && (professionalContext || scopedRecruiterQuestion && facets.length > 0);
+    const hasPronoun = /\b(?:it|that|this)\b/i.test(query);
+    const inherited = professionalContext && hasPronoun && previousTechnology.length === 1 ? previousTechnology[0] : undefined;
+    const hiring = recruiterLanguage.test(query) && (subject.test(query) || continued);
+    const associated = subject.test(query) || hiring || continued;
+    const asksForStrengths = /\bstrengths?\b/i.test(query);
+    const asksForGrowth = risks.test(query);
+    const asksForAvailability = associated && !currentEmployer.test(query) && availabilityLanguage.test(query);
+    const isProjectQuestion = explicit.length > 0 || spec !== explicit || example.test(query);
+    if (recruiterLanguage.test(query) && !associated && !isProjectQuestion) {
+      omitted = true;
+      continue;
+    }
+    const assessRequirements = associated && !currentEmployer.test(query)
+      && (!isProjectQuestion || hiring || leadershipLanguage.test(query) || ownershipLanguage.test(query))
+      && (hiring || continued || technicalAssessment.test(query) || leadershipLanguage.test(query) || ownershipLanguage.test(query));
+    const requirements = assessRequirements ? professionalRequirements(query, inherited).filter((requirement) =>
+      requirement.kind !== 'role' || !asksForAvailability && !asksForStrengths && !asksForGrowth) : [];
+    if (requirements.length || associated && asksForStrengths && asksForGrowth) {
+      for (const requirement of requirements) {
+        facets.push({
+          query, projects: [], goal: 'assessment', requirement,
+          topic: requirement.kind === 'technology' || requirement.kind === 'role' ? areaTopic(requirement.area) : 'experience',
+        });
+      }
+      if (asksForStrengths) facets.push({ query: 'What strengths does Ninad demonstrate?', topic: 'experience', projects: [], goal: 'assessment' });
+      if (asksForGrowth) facets.push({ query, topic: 'growth', projects: [], goal: 'limitations', focus: 'growth' });
+      if (asksForAvailability) facets.push({ query, topic: 'availability', projects: [], goal: 'fact' });
+      if (continued || inherited && requirements.includes(inherited)) contextual = true;
+      continue;
+    }
     const planned = classify(query, spec, priorTopic);
     if ((spec !== explicit && spec === lastProjects) || (!explicit.length && example.test(query) && priorTopic)) contextual = true;
     if (planned.length) facets.push(...planned);
     else omitted = true;
   }
-  return facets.length ? { facets: facets.slice(0, 4), detail: detailRequest.test(question), omitted, contextual } : null;
+  const unique = [...new Map(facets.map((facet) => [facet.requirement ? JSON.stringify(facet.requirement)
+    : [facet.topic, facet.focus, facet.projects.join(','), facet.topic === 'availability' ? '' : facet.query].join(':'), facet])).values()];
+  return unique.length ? { facets: unique, detail: detailRequest.test(question), omitted, contextual } : null;
 }

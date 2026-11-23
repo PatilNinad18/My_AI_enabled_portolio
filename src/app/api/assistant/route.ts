@@ -3,6 +3,7 @@ import { answer, type AnswerResult } from '@/lib/assistant/answer';
 import { InvalidRequest, isLocalRequest, readQuestion, visitorId, visitorWindow } from '@/lib/assistant/limits';
 import { presentChatEvent, type ChatEvent } from '@/lib/assistant/protocol';
 import { createProvider, type TokenUsage } from '@/lib/assistant/provider';
+import { forwardToPython } from '@/lib/assistant/python-backend';
 import { getAssistantStore, storageKey, type AssistantStore } from '@/lib/assistant/store';
 
 export const runtime = 'nodejs';
@@ -22,6 +23,15 @@ export async function POST(request: Request) {
       : errorResponse('Could not read the question.', 400);
   }
 
+  if (process.env.NINAD_AI_BACKEND !== 'legacy') {
+    try {
+      return await forwardToPython(request, input, visitorId(request, isLocalRequest(request)));
+    } catch {
+      console.warn('[ninad-ai] backend=fastapi source=proxy-error reason=visitor-identity');
+      return errorResponse('The assistant is temporarily unavailable. Please try again shortly.', 503, { 'Retry-After': '30' });
+    }
+  }
+
   const requestId = randomUUID();
   const started = Date.now();
   let geminiCalls = 0;
@@ -29,7 +39,7 @@ export async function POST(request: Request) {
   let tokenUsage: TokenUsage | undefined;
   function log(outcome: string, fields: { reason?: string; retryAfter?: number; upstreamStatus?: number } = {}) {
     console.info('[ninad-ai]', JSON.stringify({
-      requestId, outcome, geminiCalls, promptCharacters,
+      requestId, backend: 'legacy', outcome, geminiCalls, promptCharacters,
       tokenUsage: tokenUsage ?? null, durationMs: Date.now() - started, ...fields,
     }));
   }
@@ -85,6 +95,6 @@ export async function POST(request: Request) {
   });
   return new Response(body, { headers: {
     ...cache, 'Content-Type': 'application/x-ndjson; charset=utf-8', 'X-Content-Type-Options': 'nosniff', 'X-Accel-Buffering': 'no',
-    'X-Request-ID': requestId,
+    'X-Request-ID': requestId, 'X-Ninad-Backend': 'legacy',
   } });
 }

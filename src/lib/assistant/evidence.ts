@@ -1,8 +1,9 @@
 import { documents, publicPhone, retrieve, type Document } from './knowledge';
 import type { Citation } from './protocol';
 import type { Facet } from './query';
+import type { Requirement, TechnologyRequirement } from './requirements';
 
-export type Reply = { text: string; sources: Citation[] };
+export type Reply = { text: string; sources: Citation[]; level?: 'demonstrated' | 'transferable' | 'unverified' };
 const byId = new Map(documents.map((doc) => [doc.id, doc]));
 const find = (id: string) => byId.get(id)!;
 const from = (doc: Document, text = doc.facts): Reply => ({ text, sources: doc.sources });
@@ -35,6 +36,7 @@ const smart = find('internship-0');
 const fastApi = find('reviewed-smart-role');
 const development = find('reviewed-smart-work');
 const focus = project('Focus Detection System');
+const ownership = find('reviewed-timeboard-ownership');
 
 const reactExperience = combine(
   from(frontend, 'Ninad lists React, Next.js, TypeScript, and responsive web design among his frontend skills.'),
@@ -50,8 +52,90 @@ const ragExperience = combine(
   from(focus, 'He also used YOLOv8 and OpenCV for computer-vision focus detection.'),
 );
 
+function assessTechnology(facet: Facet, target: TechnologyRequirement, detail: boolean): Reply[] {
+  const { name, area, documented } = target;
+  const evidence = retrieve({ ...facet, query: name });
+  const exactProjects = [...evidence, ...documents].filter((doc) => doc.project?.stack.includes(name));
+  if (documented && (name === 'React' || name === 'FastAPI')) {
+    const scoped: Facet = { ...facet, query: name, topic: name === 'React' ? 'frontend' : 'backend', requirement: undefined };
+    return replyChoices(scoped, detail).map((reply) => ({ ...reply, level: 'demonstrated' }));
+  }
+  if (documented && exactProjects.length) {
+    const doc = exactProjects[0];
+    return [{ ...from(doc, `${name} is part of the documented stack for ${doc.title}.`), level: 'demonstrated' }];
+  }
+  if (documented) {
+    const listed = replyChoices({ ...facet, requirement: undefined, focus: `technology:${name}` }, detail)[0];
+    const source = name === 'Next.js' ? frontend : undefined;
+    const reply = source ? from(source, `Ninad lists ${name} among his frontend skills. I’d ask for a ${name} work sample if the role requires hands-on experience from day one.`) : listed;
+    if (reply) return [{ ...reply, level: 'unverified' }];
+  }
+
+  const gap = target.unspecified ? 'I’d need the framework’s name to check for direct experience.'
+    : `I don’t see direct ${name} experience in his portfolio.`;
+  const workSample = /\b(?:day[- ]one|immediately|without (?:any )?training)\b/i.test(facet.query)
+    ? ' I’d verify day-one readiness with a task in that stack.' : '';
+  switch (area) {
+    case 'frontend':
+      return [{ ...combine({ text: gap, sources: [] },
+        from(fieldora, `His React and TypeScript work on Fieldora could transfer to building interfaces and handling forms. He’d still need to learn the framework’s conventions.${workSample}`)), level: 'transferable' }];
+    case 'backend':
+      return [{ ...combine({ text: gap, sources: [] },
+        from(fastApi, `The request validation and error handling he implemented with FastAPI could transfer to writing APIs in that stack. I’d have him build a small endpoint to check his familiarity with its conventions.${workSample}`)), level: 'transferable' }];
+    case 'infrastructure':
+      return [{ ...combine({ text: gap, sources: [] },
+        from(find('skills'), 'His listed Docker fundamentals give him a starting point for container tooling. I’d check the specific deployment and operations skills the role requires.')), level: 'transferable' }];
+    case 'ai':
+      return [{ ...combine({ text: gap, sources: [] },
+        from(focus, 'His work on Focus Detection shows practical computer-vision experience. That could transfer to a similar task, with time to learn the new tooling.')), level: 'transferable' }];
+    default:
+      if (target.unspecified) {
+        const foundation = combine(from(fieldora, 'His React and TypeScript work on Fieldora and his FastAPI API work give him a starting point for another framework.'),
+          from(fastApi, 'I’d check the new stack’s conventions with a small task.'));
+        return [{ ...foundation, text: gap + ' ' + foundation.text, level: 'transferable' }];
+      }
+      return [{ text: `${gap} If it’s a core requirement, I’d confirm what the work involves and ask for a relevant sample.`, sources: [], level: 'unverified' }];
+  }
+}
+
+function assessRequirement(facet: Facet, requirement: Requirement, detail: boolean): Reply[] {
+  switch (requirement.kind) {
+    case 'technology': return assessTechnology(facet, requirement, detail);
+    case 'leadership': {
+      const experience = 'He reports leading technical workshops and co-organizing a conference, experience that could help with mentoring and coordination.';
+      const gap = requirement.softwareTeam ? ' His portfolio doesn’t establish that he’s led a software team or managed developers.' : '';
+      return [{ ...from(find('reviewed-outreach'), experience + gap),
+        level: requirement.softwareTeam ? 'transferable' : 'demonstrated' }];
+    }
+    case 'ownership':
+      return [{ ...combine(from(ownership, 'He took TimeBoard from idea through implementation.'),
+        from(timeboard, 'That included desktop activity tracking, productivity logic, and local data storage.')), level: 'demonstrated' }];
+    case 'role': {
+      const area = requirement.area;
+      const proof = area === 'frontend'
+        ? from(fieldora, 'Fieldora shows hands-on work with React, TypeScript, and dynamic web forms.')
+        : area === 'backend'
+          ? from(fastApi, 'His SmartLeaven work shows hands-on API development with Python and FastAPI.')
+          : area === 'ai'
+            ? from(agri, 'AgriRAG demonstrates practical work with retrieval, semantic embeddings, and cited answers.')
+            : area === 'infrastructure'
+              ? from(find('reviewed-growth'), 'He lists cloud infrastructure and production engineering as areas he’s developing.')
+              : from(krishi, 'KrishiTrackr shows full-stack work with React, Node.js, and authenticated APIs.');
+      const nextStep = requirement.senior || requirement.immediate
+        ? ' I’d check system design and production ownership at the scope this role requires before judging day-one fit.'
+        : area === 'frontend'
+          ? ' I’d interview him for hands-on frontend work and ask him to walk through a form or interface he built.'
+          : area === 'infrastructure'
+            ? ' I’d check hands-on deployment and operations with a role-specific task.'
+            : ' I’d consider him for hands-on implementation and ask him to walk through an end-to-end feature.';
+      return [{ ...proof, text: proof.text + nextStep, level: 'transferable' }];
+    }
+  }
+}
+
 export function replyChoices(facet: Facet, detail: boolean): Reply[] {
   if (facet.focus === 'unknown') return [];
+  if (facet.requirement) return assessRequirement(facet, facet.requirement, detail);
   const { topic, query, goal } = facet;
   const evidence = retrieve(facet);
   if (facet.focus?.startsWith('technology:')) {

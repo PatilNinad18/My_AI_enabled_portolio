@@ -7,4 +7,7 @@ next-env.d.ts
 !.env.example
 data/knowledge/private/
 data/runtime/
+__pycache__/
+.pytest_cache/
+.venv/
 .env.local

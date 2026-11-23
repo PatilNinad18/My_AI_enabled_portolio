@@ -35,12 +35,15 @@ export async function answer(
     options: replyChoices(facet, plan.detail).map((reply, index) => ({ ...reply, id: `${group}:${index}` })),
   }));
   const supported = groups.filter(({ options }) => options.length);
-  const ambiguous = supported.filter(({ options }) => options.length > 1);
+  const ambiguous = supported.filter(({ options }) => options.length > 1).slice(0, 4);
+  const selectionGroups = new Set(ambiguous.map(({ options }) => options));
   const candidateIds = new Map(ambiguous.flatMap(({ options }) => options.map((option) => [option.id, { group: options, option }] as const)));
   const selected = new Map<Reply[], Reply>();
   const shown = new Set<string>();
   const availability = supported.some(({ topic }) => topic === 'availability');
-  const direct = !plan.omitted && groups.length === supported.length && supported.every(({ topic, goal }) =>
+  const exact = groups.length === supported.length && supported.every(({ options }) =>
+    options.every(({ level }) => !level || level === 'demonstrated'));
+  const direct = !omitted && exact && supported.every(({ topic, goal }) =>
     goal === 'assessment' && ['frontend', 'backend', 'ai', 'coding'].includes(topic)) && /^(?:can|could|is|does)\b/i.test(question);
   let linkCount = 0;
   let published = 0;
@@ -61,7 +64,7 @@ export async function answer(
   function flush(useDefaults = false) {
     while (published < supported.length) {
       const { options, topic } = supported[published];
-      const reply = selected.get(options) ?? (options.length === 1 || useDefaults ? options[0] : undefined);
+      const reply = selected.get(options) ?? (!selectionGroups.has(options) || useDefaults ? options[0] : undefined);
       if (!reply) return;
       publish(reply, topic === 'availability');
     }
@@ -89,7 +92,7 @@ export async function answer(
   }
 
   // Contextual and mixed requests are never stored. Shared state holds hashes and approved option IDs only.
-  const cacheKey = !plan.contextual && !omitted ? storageKey('answer:' + createHmac('sha256', process.env.NINAD_AI_VISITOR_SECRET?.trim() || 'ninad-ai-local').update(JSON.stringify([
+  const cacheKey = !plan.contextual && !omitted && exact ? storageKey('answer:' + createHmac('sha256', process.env.NINAD_AI_VISITOR_SECRET?.trim() || 'ninad-ai-local').update(JSON.stringify([
     selectionPrompt, process.env.NINAD_AI_MODEL, question.toLowerCase().replace(/[?!.]+$/, ''),
     groups.map((group) => ({ ...group, query: group.query.toLowerCase().replace(/[?!.]+$/, '') })),
   ])).digest('hex')) : undefined;

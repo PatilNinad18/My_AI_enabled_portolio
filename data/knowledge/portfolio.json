@@ -1,0 +1,612 @@
+[
+  {
+    "id": "bio",
+    "title": "Ninad Patil — biography",
+    "aliases": [
+      "who is ninad",
+      "biography",
+      "background",
+      "engineering journey",
+      "career interests",
+      "introduce ninad"
+    ],
+    "topics": [
+      "bio"
+    ],
+    "facts": "Ninad Patil is a Full-Stack Engineer and AI Engineer studying Electronics & Telecommunication Engineering at VIIT Pune, with expected graduation in 2027. His work spans full-stack applications, AI-powered tools, real-time systems, desktop software, and applied machine learning. He started exploring software during engineering and is interested in AI, machine learning, software engineering, product development, and developer tools.",
+    "sources": [
+      {
+        "title": "Ninad’s story",
+        "href": "/story#my-story"
+      }
+    ]
+  },
+  {
+    "id": "education",
+    "title": "Education at VIIT Pune",
+    "aliases": [
+      "education",
+      "viit",
+      "college",
+      "university",
+      "graduation",
+      "degree",
+      "gpa",
+      "cgpa",
+      "school"
+    ],
+    "topics": [
+      "education"
+    ],
+    "facts": "Ninad studies B.Tech in Electronics & Telecommunication Engineering at Vishwakarma Institute of Information Technology (VIIT), Pune. The portfolio lists 2023–2027 with expected graduation in 2027.",
+    "sources": [
+      {
+        "title": "Education & beyond",
+        "href": "/story#education-beyond"
+      }
+    ]
+  },
+  {
+    "id": "internship-0",
+    "title": "SmartLeaven Technologies",
+    "aliases": [
+      "SmartLeaven Technologies",
+      "internship experience",
+      "internships",
+      "worked at",
+      "professional experience",
+      "llm",
+      "llms",
+      "rag systems"
+    ],
+    "topics": [
+      "experience",
+      "backend",
+      "ai"
+    ],
+    "facts": "SmartLeaven Technologies — Software Engineer internship, 2026. Contributing to AI-powered applications involving LLMs, RAG pipelines, AI agents, backend engineering, and intelligent automation across agricultural and recruitment use cases. The Story page lists Python, FastAPI, LangChain, Qdrant, local model deployment, structured outputs, and agent workflows among his experience.",
+    "sources": [
+      {
+        "title": "Software Engineering & AI",
+        "href": "/story#software-engineering-ai"
+      }
+    ],
+    "entities": [
+      "company/smartleaven-technologies"
+    ]
+  },
+  {
+    "id": "internship-1",
+    "title": "BlockSeBlock",
+    "aliases": [
+      "BlockSeBlock",
+      "internship experience",
+      "internships",
+      "worked at",
+      "professional experience"
+    ],
+    "topics": [
+      "experience",
+      "frontend",
+      "ai"
+    ],
+    "facts": "BlockSeBlock — internship, August to September 2025. Worked on interactive web experiences combining frontend engineering, AI features, and 3D visualization, including an interactive 3D Earth website built with React Three Fiber. ",
+    "sources": [
+      {
+        "title": "Software Engineering & AI",
+        "href": "/story#software-engineering-ai"
+      }
+    ],
+    "entities": [
+      "company/blockseblock"
+    ]
+  },
+  {
+    "id": "projects",
+    "title": "Project portfolio",
+    "aliases": [
+      "what projects",
+      "projects built",
+      "portfolio projects",
+      "what has ninad built"
+    ],
+    "topics": [
+      "projects"
+    ],
+    "facts": "The portfolio showcases TimeBoard, KrishiTrackr, SentinelX, FinCognito.AI, AgriRAG, Telegram Grievance Bot, Focus Detection System. Ninad also documents Fieldora, an independent browser extension, in his Story.",
+    "sources": [
+      {
+        "title": "My Projects",
+        "href": "/#projects"
+      },
+      {
+        "title": "Independent products",
+        "href": "/story#independent-products"
+      }
+    ]
+  },
+  {
+    "id": "project-0",
+    "title": "TimeBoard",
+    "aliases": [
+      "TimeBoard",
+      "time board",
+      "windows productivity tracker"
+    ],
+    "topics": [
+      "projects",
+      "coding",
+      "frontend",
+      "delivery"
+    ],
+    "facts": "A privacy-first Windows desktop productivity tracker that monitors application usage, calculates personalized focus scores, and visualizes work patterns through analytics dashboards, activity timelines, and downloadable reports. Stack: Electron, React, SQLite, Zustand, Recharts, Tailwind CSS. Highlights: One-second application tracking; Idle detection; Rule-based productivity insights; Focus scoring; Local SQLite persistence; CSV reporting. The README describes Electron and React, active-window tracking, idle detection, local activity history, and CSV exports. The portfolio links to a public product website.",
+    "sources": [
+      {
+        "title": "TimeBoard · GitHub",
+        "href": "https://github.com/PatilNinad18/TimeBoard"
+      },
+      {
+        "title": "TimeBoard · website",
+        "href": "https://gettimeboard.netlify.app/"
+      }
+    ],
+    "entities": [
+      "project/timeboard",
+      "technology/electron",
+      "technology/react",
+      "technology/sqlite",
+      "technology/zustand",
+      "technology/recharts",
+      "technology/tailwind-css"
+    ],
+    "project": {
+      "description": "A privacy-first Windows desktop productivity tracker that monitors application usage, calculates personalized focus scores, and visualizes work patterns through analytics dashboards, activity timelines, and downloadable reports.",
+      "stack": [
+        "Electron",
+        "React",
+        "SQLite",
+        "Zustand",
+        "Recharts",
+        "Tailwind CSS"
+      ],
+      "highlights": [
+        "One-second application tracking",
+        "Idle detection",
+        "Rule-based productivity insights",
+        "Focus scoring",
+        "Local SQLite persistence",
+        "CSV reporting"
+      ]
+    }
+  },
+  {
+    "id": "project-1",
+    "title": "KrishiTrackr",
+    "aliases": [
+      "KrishiTrackr",
+      "krishi trackr",
+      "agrotech",
+      "agritrackr"
+    ],
+    "topics": [
+      "projects",
+      "coding",
+      "frontend",
+      "backend",
+      "delivery"
+    ],
+    "facts": "A full-stack agricultural monitoring platform for visualizing soil and operational metrics, exploring nutrient data, and generating farm-performance reports. Stack: React, Node.js, Express, MongoDB, JWT. Highlights: Authentication and backend APIs; Soil-data ingestion and retrieval; Agricultural dashboards; Date-range filtering; Farm-performance reports; Operational endpoints. The AgroTech README identifies separate React frontend and Node.js/Express/MongoDB backend packages, with dashboard, table, and farm performance report views. The portfolio links to a public demo.",
+    "sources": [
+      {
+        "title": "KrishiTrackr · GitHub",
+        "href": "https://github.com/PatilNinad18/AgroTech"
+      },
+      {
+        "title": "KrishiTrackr · website",
+        "href": "https://krishitrackr.netlify.app/"
+      }
+    ],
+    "entities": [
+      "project/krishitrackr",
+      "technology/react",
+      "technology/node-js",
+      "technology/express",
+      "technology/mongodb",
+      "technology/jwt"
+    ],
+    "project": {
+      "description": "A full-stack agricultural monitoring platform for visualizing soil and operational metrics, exploring nutrient data, and generating farm-performance reports.",
+      "stack": [
+        "React",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "JWT"
+      ],
+      "highlights": [
+        "Authentication and backend APIs",
+        "Soil-data ingestion and retrieval",
+        "Agricultural dashboards",
+        "Date-range filtering",
+        "Farm-performance reports",
+        "Operational endpoints"
+      ]
+    }
+  },
+  {
+    "id": "project-2",
+    "title": "SentinelX",
+    "aliases": [
+      "SentinelX",
+      "sentinel x",
+      "disaster insight dashboard"
+    ],
+    "topics": [
+      "projects",
+      "coding",
+      "frontend",
+      "delivery"
+    ],
+    "facts": "An interactive disaster-intelligence dashboard for exploring flood and earthquake scenarios, visualizing geographic risk zones, and comparing human decisions against automated recommendations. Stack: React, TypeScript, Leaflet, Recharts, Tailwind CSS, FastAPI integration. Highlights: Disaster simulations; District-level zone visualization; Decision comparison; Alert management; Data-driven dashboards. The public frontend repository documents its React, TypeScript, and Vite setup. ",
+    "sources": [
+      {
+        "title": "SentinelX · GitHub",
+        "href": "https://github.com/PatilNinad18/disaster-insight-dashboard"
+      }
+    ],
+    "entities": [
+      "project/sentinelx",
+      "technology/react",
+      "technology/typescript",
+      "technology/leaflet",
+      "technology/recharts",
+      "technology/tailwind-css",
+      "technology/fastapi-integration"
+    ],
+    "project": {
+      "description": "An interactive disaster-intelligence dashboard for exploring flood and earthquake scenarios, visualizing geographic risk zones, and comparing human decisions against automated recommendations.",
+      "stack": [
+        "React",
+        "TypeScript",
+        "Leaflet",
+        "Recharts",
+        "Tailwind CSS",
+        "FastAPI integration"
+      ],
+      "highlights": [
+        "Disaster simulations",
+        "District-level zone visualization",
+        "Decision comparison",
+        "Alert management",
+        "Data-driven dashboards"
+      ]
+    },
+    "limitations": "Some services use mock implementations. The FastAPI backend is maintained separately."
+  },
+  {
+    "id": "project-3",
+    "title": "FinCognito.AI",
+    "aliases": [
+      "FinCognito.AI",
+      "fincognito",
+      "fin cognito"
+    ],
+    "topics": [
+      "projects",
+      "coding",
+      "frontend",
+      "backend",
+      "delivery"
+    ],
+    "facts": "A privacy-focused financial intelligence application featuring transaction imports, explainable financial analytics, scenario simulations, and isolated fictional demo and personal workspaces. Stack: React, TypeScript, FastAPI, SQLite, Tesseract OCR, Recharts. Highlights: PDF, CSV, and SMS imports; OCR document processing; Review before confirmation; Digital Twin analysis; Scenario simulation; Explainable rule-based intelligence. The repository describes an explainable financial intelligence platform. ",
+    "sources": [
+      {
+        "title": "FinCognito.AI · GitHub",
+        "href": "https://github.com/PatilNinad18/FinCognito.AI"
+      }
+    ],
+    "entities": [
+      "project/fincognito-ai",
+      "technology/react",
+      "technology/typescript",
+      "technology/fastapi",
+      "technology/sqlite",
+      "technology/tesseract-ocr",
+      "technology/recharts"
+    ],
+    "project": {
+      "description": "A privacy-focused financial intelligence application featuring transaction imports, explainable financial analytics, scenario simulations, and isolated fictional demo and personal workspaces.",
+      "stack": [
+        "React",
+        "TypeScript",
+        "FastAPI",
+        "SQLite",
+        "Tesseract OCR",
+        "Recharts"
+      ],
+      "highlights": [
+        "PDF, CSV, and SMS imports",
+        "OCR document processing",
+        "Review before confirmation",
+        "Digital Twin analysis",
+        "Scenario simulation",
+        "Explainable rule-based intelligence"
+      ]
+    },
+    "limitations": "Locally tested demonstration. Public deployment and licensing remain unresolved."
+  },
+  {
+    "id": "project-4",
+    "title": "AgriRAG",
+    "aliases": [
+      "AgriRAG",
+      "agri rag",
+      "agricultural rag assistant"
+    ],
+    "topics": [
+      "projects",
+      "coding",
+      "ai",
+      "backend"
+    ],
+    "facts": "A domain-specific agricultural RAG assistant that retrieves relevant farming information from documents and generates source-grounded answers, with a domain-adapted LLM fallback when supporting material is unavailable. Stack: Python, FastAPI, Qdrant, Sentence Transformers, AgriParam, Streamlit. Highlights: Document ingestion and chunking; Semantic embeddings; Vector similarity retrieval; Page-level citations; Domain-specific LLM; Dual-mode responses. Its README documents page-level document provenance, Qdrant vector retrieval, a Sentence Transformers embedder, and a Streamlit UI. ",
+    "sources": [
+      {
+        "title": "AgriRAG · GitHub",
+        "href": "https://github.com/PatilNinad18/AgriRAG"
+      }
+    ],
+    "entities": [
+      "project/agrirag",
+      "technology/python",
+      "technology/fastapi",
+      "technology/qdrant",
+      "technology/sentence-transformers",
+      "technology/agriparam",
+      "technology/streamlit"
+    ],
+    "project": {
+      "description": "A domain-specific agricultural RAG assistant that retrieves relevant farming information from documents and generates source-grounded answers, with a domain-adapted LLM fallback when supporting material is unavailable.",
+      "stack": [
+        "Python",
+        "FastAPI",
+        "Qdrant",
+        "Sentence Transformers",
+        "AgriParam",
+        "Streamlit"
+      ],
+      "highlights": [
+        "Document ingestion and chunking",
+        "Semantic embeddings",
+        "Vector similarity retrieval",
+        "Page-level citations",
+        "Domain-specific LLM",
+        "Dual-mode responses"
+      ]
+    }
+  },
+  {
+    "id": "project-5",
+    "title": "Telegram Grievance Bot",
+    "aliases": [
+      "Telegram Grievance Bot",
+      "telebot",
+      "telegram bot",
+      "grievance bot"
+    ],
+    "topics": [
+      "projects",
+      "coding",
+      "ai",
+      "backend"
+    ],
+    "facts": "An AI-assisted citizen grievance management system that accepts complaints through Telegram, automatically classifies and routes grievances, assigns urgency levels, and provides a real-time administrative dashboard. Stack: Python, aiogram, FastAPI, MongoDB, Hugging Face, Chart.js, SSE. Highlights: Telegram commands; Weighted keyword classification; Zero-shot NLP fallback; Department routing; Priority detection; Real-time dashboard updates.  ",
+    "sources": [
+      {
+        "title": "Telegram Grievance Bot · GitHub",
+        "href": "https://github.com/PatilNinad18/TeleBot"
+      }
+    ],
+    "entities": [
+      "project/telegram-grievance-bot",
+      "technology/python",
+      "technology/aiogram",
+      "technology/fastapi",
+      "technology/mongodb",
+      "technology/hugging-face",
+      "technology/chart-js",
+      "technology/sse"
+    ],
+    "project": {
+      "description": "An AI-assisted citizen grievance management system that accepts complaints through Telegram, automatically classifies and routes grievances, assigns urgency levels, and provides a real-time administrative dashboard.",
+      "stack": [
+        "Python",
+        "aiogram",
+        "FastAPI",
+        "MongoDB",
+        "Hugging Face",
+        "Chart.js",
+        "SSE"
+      ],
+      "highlights": [
+        "Telegram commands",
+        "Weighted keyword classification",
+        "Zero-shot NLP fallback",
+        "Department routing",
+        "Priority detection",
+        "Real-time dashboard updates"
+      ]
+    }
+  },
+  {
+    "id": "project-6",
+    "title": "Focus Detection System",
+    "aliases": [
+      "Focus Detection System",
+      "focus detection",
+      "focusdetection"
+    ],
+    "topics": [
+      "projects",
+      "coding",
+      "ai",
+      "frontend",
+      "backend"
+    ],
+    "facts": "A computer-vision-powered focus monitoring system that analyzes webcam input to estimate attention, detect distractions, and provide real-time productivity feedback. Stack: Python, YOLOv8, OpenCV, FastAPI, React, Tailwind CSS. Highlights: Face and eye tracking; Phone and writing-activity detection; Fatigue indicators; Focus score estimation; Real-time video processing; Customizable focus sessions. Its README describes webcam-based detection of attention and distractions alongside timed focus sessions. ",
+    "sources": [
+      {
+        "title": "Focus Detection System · GitHub",
+        "href": "https://github.com/PatilNinad18/FocusDetection"
+      }
+    ],
+    "entities": [
+      "project/focus-detection-system",
+      "technology/python",
+      "technology/yolov8",
+      "technology/opencv",
+      "technology/fastapi",
+      "technology/react",
+      "technology/tailwind-css"
+    ],
+    "project": {
+      "description": "A computer-vision-powered focus monitoring system that analyzes webcam input to estimate attention, detect distractions, and provide real-time productivity feedback.",
+      "stack": [
+        "Python",
+        "YOLOv8",
+        "OpenCV",
+        "FastAPI",
+        "React",
+        "Tailwind CSS"
+      ],
+      "highlights": [
+        "Face and eye tracking",
+        "Phone and writing-activity detection",
+        "Fatigue indicators",
+        "Focus score estimation",
+        "Real-time video processing",
+        "Customizable focus sessions"
+      ]
+    }
+  },
+  {
+    "id": "fieldora",
+    "title": "Fieldora",
+    "aliases": [
+      "fieldora",
+      "form autofill",
+      "browser extension"
+    ],
+    "topics": [
+      "frontend",
+      "projects",
+      "coding"
+    ],
+    "facts": "Fieldora is an independent browser extension for reducing repetitive form filling with local profile-based autofill. The Story page lists React, TypeScript, Vite, and Chrome Extension APIs, with dynamic form detection, intelligent field matching, React-controlled inputs, and custom dropdowns.",
+    "sources": [
+      {
+        "title": "Fieldora · Independent products",
+        "href": "/story#independent-products"
+      }
+    ],
+    "entities": [
+      "product/fieldora",
+      "skill/frontend-engineering"
+    ]
+  },
+  {
+    "id": "skills",
+    "title": "Technical skills and tools",
+    "aliases": [
+      "skills",
+      "technologies",
+      "tech stack",
+      "tools",
+      "what does ninad work with"
+    ],
+    "topics": [
+      "frontend",
+      "backend",
+      "ai",
+      "tools"
+    ],
+    "facts": "Full-Stack Development: Building end-to-end applications with React, Next.js, Node.js, and modern frontend and backend technologies. Backend Engineering: Developing REST APIs, application logic, database integrations, and backend services using Python, FastAPI, and Node.js. AI & LLM Applications: Building LLM-powered applications using RAG, vector search, embeddings, prompt engineering, and AI agent workflows. Machine Learning & Computer Vision: Exploring machine learning and computer vision through Python, PyTorch, TensorFlow, OpenCV, and YOLOv8. Databases & Real-Time Systems: Working with PostgreSQL, MongoDB, SQLite, and Qdrant to design data storage, retrieval, and application workflows. Development Tools & Deployment: Using Git, GitHub, Docker, testing tools, and deployment platforms to develop and maintain software applications. Listed tools: React, Next.js, TypeScript, JavaScript, Node.js, Express, FastAPI, Python, MongoDB, SQLite, PyTorch, scikit-learn, YOLOv8, OpenCV, Qdrant, RAG, Docker, Git, GitHub, Electron, Tailwind CSS.",
+    "sources": [
+      {
+        "title": "Skills & Expertise",
+        "href": "/#home-expertise"
+      }
+    ]
+  },
+  {
+    "id": "delivery-evidence",
+    "title": "Public releases and project limitations",
+    "aliases": [
+      "production ready",
+      "production readiness",
+      "deployed",
+      "live demo",
+      "production scale"
+    ],
+    "topics": [
+      "delivery"
+    ],
+    "facts": "TimeBoard has a public product website and KrishiTrackr has a public demo. Some SentinelX services use mock implementations and its FastAPI backend is maintained separately. FinCognito.AI is documented as a locally tested demonstration with public deployment and licensing unresolved. These are project-level observations. The portfolio does not document independent certification of production readiness or measured production scale.",
+    "sources": [
+      {
+        "title": "Project highlights and demos",
+        "href": "/#projects"
+      }
+    ]
+  },
+  {
+    "id": "availability",
+    "title": "Joining availability",
+    "aliases": [
+      "joining date",
+      "notice period",
+      "availability"
+    ],
+    "topics": [
+      "availability"
+    ],
+    "facts": "His start date and notice period aren’t confirmed in the portfolio, so you can ask him directly on LinkedIn.",
+    "sources": [
+      {
+        "title": "LinkedIn",
+        "href": "https://www.linkedin.com/in/ninadpatil18/"
+      }
+    ]
+  },
+  {
+    "id": "contact",
+    "title": "Public professional contact",
+    "aliases": [
+      "contact",
+      "reach",
+      "linkedin",
+      "github profile",
+      "phone",
+      "email",
+      "connect"
+    ],
+    "topics": [
+      "contact"
+    ],
+    "facts": "Ninad’s public portfolio lists LinkedIn, GitHub, and the professional contact phone +91 8605221851. No contact email is listed in the portfolio’s contact section.",
+    "sources": [
+      {
+        "title": "LinkedIn",
+        "href": "https://www.linkedin.com/in/ninadpatil18/"
+      },
+      {
+        "title": "GitHub",
+        "href": "https://github.com/PatilNinad18"
+      },
+      {
+        "title": "Let’s Connect",
+        "href": "/#contact"
+      }
+    ]
+  }
+]

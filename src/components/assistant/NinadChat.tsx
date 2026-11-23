@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
-import { contextLimit, isPublicLink, questionLimit, readLines, type ChatStreamEvent, type ConversationTurn, type PublicLink } from '@/lib/assistant/protocol';
+import { historyLimit, isPublicLink, questionLimit, readLines, type ChatStreamEvent, type ConversationTurn, type PublicLink } from '@/lib/assistant/protocol';
 import RobotScene from './RobotScene';
 import MessageText from './MessageText';
 import styles from '@/styles/assistant.module.scss';
@@ -144,7 +144,7 @@ export default function NinadChat() {
       const reply = earlier[index + 1];
       if (message.role !== 'user' || reply?.role !== 'assistant' || !reply.grounded) return [];
       return [{ question: message.text, answer: reply.text.slice(0, questionLimit) }];
-    }).slice(-contextLimit);
+    }).slice(-historyLimit);
     autoScroll.current = true;
     setAway(false);
     setDraft('');
