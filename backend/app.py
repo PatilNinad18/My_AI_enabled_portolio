@@ -67,7 +67,7 @@ def create_app(*, corpus=None, store=None, model=CONFIGURE, secret=None):
         return JSONResponse({"message": "The assistant is temporarily unavailable. Please try again shortly."},
                             status_code=500, headers=HEADERS)
 
-    @app.get("/healthz")
+    @app.api_route("/healthz", methods=["GET", "HEAD"])
     async def health():
         return JSONResponse({"status": "ok"}, headers=HEADERS)
 
